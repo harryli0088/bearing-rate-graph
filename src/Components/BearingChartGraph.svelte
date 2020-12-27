@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { scaleLinear } from "d3-scale"
 
-	export let maxTimeIndicies:number = 50
+	export let maxHistoryLength:number = 50
 	export let bearingHistories: number[][] = []
 	export let colors:string[] = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
 
@@ -31,7 +31,7 @@
 	)
 
 	$: yScale = scaleLinear().domain(
-		[0, maxTimeIndicies]
+		[0, maxHistoryLength]
 	).range(
 		[margin.top, margin.top + effectiveHeight]
 	)
@@ -94,6 +94,7 @@
   }
 	path {
     stroke-width: 2px;
+		fill: none;
   }
 	circle {
     stroke-width: 2px;

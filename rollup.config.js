@@ -7,6 +7,17 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 
+import alias from '@rollup/plugin-alias';
+
+const aliases = alias({
+  resolve: ['.svelte', '.js'],
+  entries: [
+    { find: 'Components', replacement: 'src/Components' },
+    { find: 'Classes', replacement: 'src/Classes' },
+  ]
+});
+
+
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -39,6 +50,7 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		aliases,
 		svelte({
 			preprocess: sveltePreprocess(),
 			compilerOptions: {
