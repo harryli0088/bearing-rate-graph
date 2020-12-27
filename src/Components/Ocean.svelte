@@ -25,7 +25,7 @@
       <circle
         cx={actor.positionX}
         cy={actor.positionY}
-        r={8}
+        r={1000 / actor.distanceFromPlayer}
         stroke={colors[i]}
       />
     {/each}

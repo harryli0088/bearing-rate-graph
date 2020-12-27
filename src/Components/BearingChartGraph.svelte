@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { scaleLinear } from "d3-scale"
+	import PhysicsObject from '../Classes/PhysicsObject.ts';
 
 	export let maxHistoryLength:number = 50
-	export let bearingHistories: number[][] = []
+	export let otherActors: PhysicsObject[] = []
 	export let colors:string[]
 
   let height:number = 500
@@ -64,10 +65,10 @@
     </g>
 
 		<g>
-      {#each bearingHistories as bearings, i}
+      {#each otherActors as actor, i}
 				{#if true}
 					<path
-						d={"M" + bearings.map((b,bearingIndex) =>
+						d={"M" + actor.bearingHistories.map((b,bearingIndex) =>
 							`${xScale(b)},${yScale(bearingIndex)}`
 						).join(" ")}
 						stroke={colors[i]}
@@ -77,11 +78,11 @@
     </g>
 
 		<g>
-      {#each bearingHistories as bearings, i}
+      {#each otherActors as actor, i}
         <circle
-					cx={xScale(bearings[0])}
+					cx={xScale(actor.bearingHistories[0])}
 					cy={yScale(0)}
-					r={8}
+					r={1000 / actor.distanceFromPlayer}
 					stroke={colors[i]}
 				/>
       {/each}

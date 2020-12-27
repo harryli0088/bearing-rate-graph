@@ -1,6 +1,7 @@
 export default class PhysicsObject {
   acceleration:number
   bearingHistories: number[] = []
+  distanceFromPlayer: number = Infinity
   heading: number
   maxHistoryLength: number
   positionX: number
@@ -26,11 +27,19 @@ export default class PhysicsObject {
     this.velocityY = options.velocityY ?? 0
   }
 
-  update = () => {
-    this.velocityX += this.acceleration * Math.cos(this.heading)
-    this.velocityY += this.acceleration * Math.sin(this.heading)
+  update = (player?:PhysicsObject) => {
+    const rad = (this.heading - 90) * Math.PI / 180
+    this.velocityX += this.acceleration * Math.cos(rad)
+    this.velocityY += this.acceleration * Math.sin(rad)
     this.positionX += this.velocityX
     this.positionY += this.velocityY
+
+    if(player) {
+      this.distanceFromPlayer = Math.hypot(
+        this.positionX - player.positionX,
+        this.positionY - player.positionY,
+      )
+    }
   }
 
   addBearing = (bearing: number) => {

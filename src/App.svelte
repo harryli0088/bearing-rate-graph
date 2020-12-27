@@ -28,7 +28,7 @@
 	function run() {
 		player.update()
     otherActors.forEach(actor => {
-      actor.update()
+      actor.update(player)
       actor.addBearing(getBearing(
 				player.positionX,
 				player.positionY,
@@ -47,9 +47,9 @@
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
 	<BearingChartGraph
-		bearingHistories={otherActors.map(a => a.bearingHistories)}
 		colors={COLORS}
 		maxHistoryLength={MAX_HISTORY_LENGTH}
+		{otherActors}
 	/>
 	<Ocean
 		colors={COLORS}
