@@ -3,7 +3,7 @@
 
 	export let maxHistoryLength:number = 50
 	export let bearingHistories: number[][] = []
-	export let colors:string[] = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
+	export let colors:string[]
 
   let height:number = 500
   let width:number = 1000
@@ -65,12 +65,14 @@
 
 		<g>
       {#each bearingHistories as bearings, i}
-        <path
-					d={"M" + bearings.map((b,bearingIndex) =>
-						`${xScale(b)},${yScale(bearingIndex)}`
-					).join(" ")}
-					stroke={colors[i]}
-				/>
+				{#if true}
+					<path
+						d={"M" + bearings.map((b,bearingIndex) =>
+							`${xScale(b)},${yScale(bearingIndex)}`
+						).join(" ")}
+						stroke={colors[i]}
+					/>
+				{/if}
       {/each}
     </g>
 

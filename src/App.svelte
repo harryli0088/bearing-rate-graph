@@ -2,9 +2,11 @@
 	import { onMount, onDestroy } from 'svelte';
 	import PhysicsObject from './Classes/PhysicsObject';
 	import BearingChartGraph from 'Components/BearingChartGraph.svelte';
+	import Ocean from 'Components/Ocean.svelte';
 	import getBearing from './utils/getBearing';
 	export let name: string;
 
+	const COLORS = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
 	const MAX_HISTORY_LENGTH = 50
 
 	let player = new PhysicsObject({
@@ -14,6 +16,7 @@
 	})
 	let otherActors: PhysicsObject[] = [
 		new PhysicsObject({
+			acceleration: 0.5,
 			maxHistoryLength: MAX_HISTORY_LENGTH,
 			positionX: 100,
 			positionY: 100,
@@ -45,7 +48,13 @@
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
 	<BearingChartGraph
 		bearingHistories={otherActors.map(a => a.bearingHistories)}
+		colors={COLORS}
 		maxHistoryLength={MAX_HISTORY_LENGTH}
+	/>
+	<Ocean
+		colors={COLORS}
+		{otherActors}
+		{player}
 	/>
 </main>
 
