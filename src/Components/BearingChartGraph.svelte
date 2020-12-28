@@ -38,24 +38,28 @@
 		[margin.top, margin.top + effectiveHeight]
 	)
 
-	$: pathData = otherActors.map(actor => {
+	$: pathData = otherActors.map(actor => { //generate path strings for each other actor
 		let d = "M"
-		actor.bearingHistories.forEach((b,bearingIndex) => {
-			d += ` ${xScale(b)},${yScale(bearingIndex)}`
 
-			const nextBearing = actor.bearingHistories[bearingIndex + 1]
-			const max = Math.max(b, nextBearing)
-			const min = Math.min(b, nextBearing)
+		let lastBearing:number = 0
+		actor.bearingHistories.forEach((b,bearingIndex) => { //for each bearing in this actor's history
+			//we want to make sure the path skips over jumps at 180, but not 359 to 0
+			const max = Math.max(b, lastBearing)
+			const min = Math.min(b, lastBearing)
 			if(
-				max >= 180
-				&& max < 200
-				&& min < 180
-				&& min > 160
+				max >= 180 //if the max bearing is above 180
+				&& max < 200 //and was below 200 (to avoid skipping from 359 to 0)
+				&& min < 180 //and the min bearing was below 180
+				&& min > 160 //and was above 160 (to avoid skipping from 359 to 0)
 			) {
-				d += " M"
+				d += " M" //add an M to draw a discontinuous path
 			}
+			lastBearing = b //record the this bearing for the next iteration
+
+			d += ` ${xScale(b)},${yScale(bearingIndex)}` //append the next path coordinates
 		})
-		return d
+
+		return d //return the path string
 	})
 </script>
 
