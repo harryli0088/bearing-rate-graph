@@ -2,6 +2,7 @@
   import { beforeUpdate, afterUpdate } from 'svelte'
 
   import PhysicsObject from '../Classes/PhysicsObject.ts'
+  import drawLine from '../utils/canvas/drawLine.ts'
   import getActorSize from '../utils/getActorSize.ts'
 
   export let colors: string[]
@@ -19,7 +20,11 @@
 
   let height:number = 500
   let width:number = 1000
-  $: diagonal = Math.hypot(width, height)
+  $: diagonal = Math.hypot(width, height) //we need this to make sure we draw a background big enough to cover the screen, even when the background is rotated
+
+  function incrementGridPosition(position:number) {
+    return Math.ceil((position + 1) / 100) * 100
+  }
 
   afterUpdate(() => {
     const ctx = canvas.getContext('2d')
@@ -38,7 +43,7 @@
         ctx.translate(-player.positionX, -player.positionY)
       }
 
-      //redraw the background
+      //redraw the background, making sure it's big enough to cover the canvas even if it is rotated
       const leftX = player.positionX - diagonal/2
       const topY = player.positionY - diagonal/2
       ctx.clearRect(leftX, topY, diagonal, diagonal)
@@ -50,22 +55,15 @@
       ctx.lineWidth = 0.5
       const rightX = leftX + diagonal
       const bottomY = topY + diagonal
-
-      let gridPosition = leftX
-      while(gridPosition < rightX) {
-        gridPosition = Math.ceil((gridPosition + 1) / 100) * 100
-        ctx.beginPath()
-        ctx.moveTo(gridPosition, topY)
-        ctx.lineTo(gridPosition, bottomY)
-        ctx.stroke()
+      let gridPosition = leftX //start on the left of the canvas
+      while(gridPosition < rightX) { //horizontal grid lines
+        gridPosition = incrementGridPosition(gridPosition)
+        drawLine(ctx, gridPosition, topY, gridPosition, bottomY)
       }
-      gridPosition = topY
-      while(gridPosition < bottomY) {
-        gridPosition = Math.ceil((gridPosition + 1) / 100) * 100
-        ctx.beginPath()
-        ctx.moveTo(leftX, gridPosition)
-        ctx.lineTo(rightX, gridPosition)
-        ctx.stroke()
+      gridPosition = topY //start on the top of the canvas
+      while(gridPosition < bottomY) { //vertical grid lines
+        gridPosition = incrementGridPosition(gridPosition)
+        drawLine(ctx, leftX, gridPosition, rightX, gridPosition)
       }
 
 
@@ -73,10 +71,7 @@
       ctx.lineWidth = 2
       otherActors.forEach((actor, i) => {
         ctx.strokeStyle = colors[i]
-        ctx.beginPath()
-        ctx.moveTo(player.positionX, player.positionY)
-        ctx.lineTo(actor.positionX, actor.positionY)
-        ctx.stroke()
+        drawLine(ctx, player.positionX, player.positionY, actor.positionX, actor.positionY)
       })
 
       //actors
@@ -85,7 +80,6 @@
         ctx.beginPath()
         ctx.arc(actor.positionX, actor.positionY, getActorSize(actor.distanceFromPlayer), 0, 2 * Math.PI)
         ctx.stroke()
-        ctx.fill()
       })
 
 
