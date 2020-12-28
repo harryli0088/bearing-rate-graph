@@ -9,13 +9,10 @@
 	const COLORS = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
 	const MAX_HISTORY_LENGTH = 50
 
-	//TODO heading acceleration
-	//TODO draw out as far as hypotenus of canvas
-
 	let player = new PhysicsObject({
 		maxHistoryLength: MAX_HISTORY_LENGTH,
-		positionX: 50,
-		positionY: 50,
+		positionX: 0,
+		positionY: 0,
 	})
 	let otherActors: PhysicsObject[] = [
 		new PhysicsObject({
@@ -34,7 +31,7 @@
 				break
 			case 39: //right arrow
 			case 68: //d
-				player.heading += 10
+				player.angularAcceleration = 0.5
 				break
 			case 40: //down arrow
 			case 83: //s
@@ -42,7 +39,7 @@
 				break
 			case 37: //left arrow
 			case 65: //a
-				player.heading -= 10
+				player.angularAcceleration = -0.5
 				break
 			default:
 		}
@@ -54,16 +51,16 @@
 			case 97: //w
 				player.acceleration = 0
 				break
-			// case 39: //right arrow
-			// case 68: //d
-			// 	player.heading += 10
-			// 	break
+			case 39: //right arrow
+			case 68: //d
+				player.angularAcceleration = 0
+				break
 			// case 40: //down arrow
 			// case 83: //s
-			// case 37: //left arrow
-			// case 65: //a
-			// 	player.heading -= 10
-			// 	break
+			case 37: //left arrow
+			case 65: //a
+				player.angularAcceleration = 0
+				break
 			default:
 		}
 	}
