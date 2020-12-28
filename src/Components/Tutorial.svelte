@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte'
+	import { onDestroy } from 'svelte'
   import PhysicsObject from '../Classes/PhysicsObject.ts'
 	import BearingRateGraph from 'Components/BearingRateGraph.svelte'
 	import getBearing from '../utils/getBearing.ts'
@@ -30,7 +30,8 @@
     ))
 		actor = actor
 	}
-	const interval = setInterval(run, 50)
+  const INTERVAL_TIME = 50
+	const interval = setInterval(run, INTERVAL_TIME)
 
   let svg
   function onMouseMove(e) {
@@ -45,10 +46,6 @@
     actor.positionX = clientX - dimensions.left - fullWidth/2
     actor.positionY = clientY - dimensions.top - fullHeight/2
   }
-
-
-	onMount(() => {
-	})
 
 	onDestroy(() => {
 		clearInterval(interval)
@@ -81,6 +78,7 @@
 
 	<BearingRateGraph
 		colors={["red"]}
+    intervalTime={INTERVAL_TIME}
 		maxHistoryLength={MAX_HISTORY_LENGTH}
 		otherActors={[actor]}
 	/>

@@ -3,17 +3,18 @@
 	import PhysicsObject from '../Classes/PhysicsObject.ts';
 	import getActorSize from '../utils/getActorSize.ts'
 
+	export let colors:string[]
+	export let intervalTime:number = 50
 	export let maxHistoryLength:number = 50
 	export let otherActors: PhysicsObject[] = []
-	export let colors:string[]
 
   let height:number = 500
   let width:number = 1000
   const margin = {
-    top: 30,
-    left: 20,
+    top: 40,
+    left: 100,
     right: 20,
-    bottom: 0,
+    bottom: 15,
   }
 
   $: effectiveHeight = height - margin.top - margin.bottom
@@ -38,6 +39,9 @@
 		[margin.top, margin.top + effectiveHeight]
 	)
 
+	$:yTop = yScale(0)
+	$: yBottom = yScale(maxHistoryLength - 1)
+
 	$: pathData = otherActors.map(actor => { //generate path strings for each other actor
 		let d = "M"
 
@@ -61,6 +65,8 @@
 
 		return d //return the path string
 	})
+
+	$: timeSpan = maxHistoryLength * intervalTime
 </script>
 
 <main>
@@ -78,13 +84,22 @@
       {/each}
     </g>
 
+		<g transform="translate(-20,0)">
+			<text x={margin.left - 20} y={yScale(0)} dy={5} text-anchor="end">Now</text>
+			<line x1={margin.left - 15} y1={yScale(0)} x2={margin.left} y2={yScale(0)}/>
+			<line x1={margin.left} y1={yScale(0)} x2={margin.left} y2={yBottom}/>
+			<line x1={margin.left - 15} y1={yBottom} x2={margin.left} y2={yBottom}/>
+			<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{(timeSpan/1000).toFixed(1)} sec</text>
+			<text x={margin.left - 20} y={yBottom} dy={10} text-anchor="end">ago</text>
+		</g>
+
     <g>
       {#each bearingLabels as label}
         <line
 					x1={label.x + margin.left}
 					x2={label.x + margin.left}
-					y1={margin.top}
-					y2={effectiveHeight + margin.top}
+					y1={yTop}
+					y2={yBottom}
 				/>
       {/each}
     </g>
@@ -114,6 +129,10 @@
 </main>
 
 <style>
+	svg {
+		border: 1px solid black;
+	}
+
   line {
     stroke: gray;
     stroke-width: 1px;

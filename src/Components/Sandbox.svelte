@@ -84,8 +84,9 @@
 	}
 
   let interval = -1
+  const INTERVAL_TIME = 50
   function onFocus() {
-    interval = setInterval(run, 50)
+    interval = setInterval(run, INTERVAL_TIME)
   }
   function onBlur() {
     clearInterval(interval)
@@ -100,6 +101,7 @@
 	<div tabindex={1} on:focus={onFocus} on:blur={onBlur} on:keydown={onKeyDown} on:keyup={onKeyUp}>
     <BearingRateGraph
       colors={COLORS}
+      intervalTime={INTERVAL_TIME}
       maxHistoryLength={MAX_HISTORY_LENGTH}
       {otherActors}
     />
