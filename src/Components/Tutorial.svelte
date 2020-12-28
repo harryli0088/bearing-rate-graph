@@ -6,10 +6,19 @@
 
   const MAX_HISTORY_LENGTH = 50
 
+  let fullWidth:number = 500
+  let fullHeight:number = 500
+  const DIAG_CONSTANT = Math.sqrt(2)/2
+  const PADDING = 30
+  $: width = fullWidth - 2*PADDING
+  $: height = fullHeight - 2*PADDING
+  $: halfWidth = width/2
+  $: halfHeight = height/2
+
 	let actor: PhysicsObject = new PhysicsObject({
     maxHistoryLength: MAX_HISTORY_LENGTH,
     positionX: 0,
-    positionY: -1,
+    positionY: -fullHeight/2 + PADDING,
   })
 
 
@@ -26,15 +35,11 @@
   let svg
   function mousemove(e) {
     const dimensions = svg.getBoundingClientRect()
-    const x = e.clientX - dimensions.left - halfWidth
-    const y = e.clientY - dimensions.top - halfHeight
+    const x = e.clientX - dimensions.left - fullWidth/2
+    const y = e.clientY - dimensions.top - fullHeight/2
 
-    const hypot = Math.hypot(x, y)
-    const unitX = x / hypot
-    const unitY = y / hypot
-
-    actor.positionX = unitX
-    actor.positionY = unitY
+    actor.positionX = x
+    actor.positionY = y
   }
 
 
@@ -44,15 +49,6 @@
 	onDestroy(() => {
 		clearInterval(interval)
 	})
-
-  let fullWidth:number = 500
-  let fullHeight:number = 500
-  const DIAG_CONSTANT = Math.sqrt(2)/2
-  const PADDING = 30
-  $: width = fullWidth - 2*PADDING
-  $: height = fullHeight - 2*PADDING
-  $: halfWidth = width/2
-  $: halfHeight = height/2
 </script>
 
 <main>
@@ -67,8 +63,8 @@
       </g>
 
       <g>
-        <line x1={0} y1={0} x2={actor.positionX * halfWidth} y2={actor.positionY * halfHeight} stroke="red" stroke-width="2px"/>
-        <circle cx={actor.positionX * halfWidth} cy={actor.positionY * halfHeight} r={10} fill="none" stroke="red" stroke-width="2px"/>
+        <line x1={0} y1={0} x2={actor.positionX} y2={actor.positionY} stroke="red" stroke-width="2px"/>
+        <circle cx={actor.positionX} cy={actor.positionY} r={10} fill="none" stroke="red" stroke-width="2px"/>
       </g>
     </g>
   </svg>
