@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte'
+	import Tutorial from 'Components/Tutorial.svelte'
 	import Sandbox from 'Components/Sandbox.svelte'
 	export let name: string
 </script>
@@ -7,6 +8,7 @@
 <main>
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<Tutorial/>
 	<Sandbox/>
 </main>
 

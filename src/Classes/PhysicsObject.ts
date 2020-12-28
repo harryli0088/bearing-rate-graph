@@ -3,7 +3,7 @@ export default class PhysicsObject {
   angularAcceleration: number
   angularVelocity: number
   bearingHistories: number[] = []
-  distanceFromPlayer: number = Infinity
+  distanceFromPlayer: number = 100
   heading: number
   maxHistoryLength: number
   positionX: number
