@@ -11,8 +11,8 @@
 
 	let player = new PhysicsObject({
 		maxHistoryLength: MAX_HISTORY_LENGTH,
-		positionX: 0,
-		positionY: 0,
+		positionX: 50,
+		positionY: 50,
 	})
 	let otherActors: PhysicsObject[] = [
 		new PhysicsObject({
@@ -78,7 +78,7 @@
     })
 		otherActors = otherActors
 	}
-	const interval = setInterval(run, 500)
+	const interval = setInterval(run, 50)
 
 
 	onMount(() => {

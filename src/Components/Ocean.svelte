@@ -20,17 +20,20 @@
 
   	function draw() {
       ctx.save()
-      const transform = ctx.getTransform()
-      console.log(transform)
 
       const expectedLeftX = player.positionX - width / 2
       const expectedTopY = player.positionY - height / 2
+
+      //center the canvas on the player
       ctx.translate(-expectedLeftX, -expectedTopY)
 
+      //rotate the canvas to keep the player pointing up
+      ctx.translate(player.positionX, player.positionY)
+      ctx.rotate(-player.heading * Math.PI / 180)
+      ctx.translate(-player.positionX, -player.positionY)
 
-
+      //redraw the background
       ctx.clearRect(expectedLeftX, expectedTopY, width + 2, height + 2)
-
       ctx.fillStyle = "lightblue"
       ctx.fillRect(expectedLeftX, expectedTopY, width + 2, height + 2)
 
@@ -89,15 +92,8 @@
       ctx.lineTo(player.positionX + 5, player.positionY + 6)
       ctx.lineTo(player.positionX - 5, player.positionY + 6)
       ctx.fill()
+
       ctx.restore()
-
-
-      // ctx.save()
-      // let currentRotation = Math.atan2(transform.b, transform.a)
-      // ctx.translate(player.positionX, player.positionY)
-      // ctx.rotate(player.heading * Math.PI / 180)
-      // ctx.translate(-player.positionX, -player.positionY)
-      // ctx.restore()
   	}
   })
 </script>
