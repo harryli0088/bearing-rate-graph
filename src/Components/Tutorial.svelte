@@ -18,7 +18,7 @@
 	let actor: PhysicsObject = new PhysicsObject({
     maxHistoryLength: MAX_HISTORY_LENGTH,
     positionX: 0,
-    positionY: -fullHeight/2 + PADDING,
+    positionY: (-fullHeight/2 + PADDING)*3/4,
   })
 
 
@@ -56,10 +56,16 @@
     <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
       <g class="grid">
         <circle cx={0} cy={0} r={halfWidth*3/4}/>
+
         <line x1={0} y1={-halfHeight} x2={0} y2={halfHeight}/>
         <line x1={-halfWidth} y1={0} x2={halfWidth} y2={0}/>
         <line x1={-halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
         <line x1={halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={-halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
+
+        <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
+        <text x={halfWidth} y={0} dy={-5}>90°</text>
+        <text x={0} y={halfHeight} dy={15}>180°</text>
+        <text x={-halfWidth} y={0} dy={-5}>270°</text>
       </g>
 
       <g>
@@ -85,5 +91,8 @@
     fill: none;
     stroke: gray;
     stroke-width: 1px;
+  }
+  .grid text {
+    text-anchor: middle;
   }
 </style>

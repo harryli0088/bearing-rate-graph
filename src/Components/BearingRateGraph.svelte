@@ -73,7 +73,7 @@
           x={label.x + margin.left}
           y={margin.top}
         >
-          {label.text}
+          {label.text}°
         </text>
       {/each}
     </g>
