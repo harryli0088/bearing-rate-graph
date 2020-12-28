@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte'
+	import { onDestroy } from 'svelte'
 	import PhysicsObject from '../Classes/PhysicsObject.ts'
 	import BearingRateGraph from 'Components/BearingRateGraph.svelte'
 	import Ocean from 'Components/Ocean.svelte'
@@ -26,18 +26,22 @@
 		switch(e.keyCode) {
 			case 38: //up arrow
 			case 97: //w
+        e.preventDefault()
 				player.acceleration = 1
 				break
 			case 39: //right arrow
 			case 68: //d
+        e.preventDefault()
 				player.angularAcceleration = 0.5
 				break
 			case 40: //down arrow
 			case 83: //s
+        e.preventDefault()
 				player.acceleration = 0
 				break
 			case 37: //left arrow
 			case 65: //a
+        e.preventDefault()
 				player.angularAcceleration = -0.5
 				break
 			default:
@@ -78,32 +82,33 @@
     })
 		otherActors = otherActors
 	}
-	const interval = setInterval(run, 50)
 
-
-	onMount(() => {
-		window.addEventListener("keydown", onKeyDown)
-		window.addEventListener("keyup", onKeyUp)
-	})
+  let interval = -1
+  function onFocus() {
+    interval = setInterval(run, 50)
+  }
+  function onBlur() {
+    clearInterval(interval)
+  }
 
 	onDestroy(() => {
 		clearInterval(interval)
-		window.removeEventListener("keydown", onKeyDown)
-		window.removeEventListener("keyup", onKeyUp)
 	})
 </script>
 
 <main>
-	<BearingRateGraph
-		colors={COLORS}
-		maxHistoryLength={MAX_HISTORY_LENGTH}
-		{otherActors}
-	/>
-	<Ocean
-		colors={COLORS}
-		{otherActors}
-		{player}
-	/>
+	<div tabindex={1} on:focus={onFocus} on:blur={onBlur} on:keydown={onKeyDown} on:keyup={onKeyUp}>
+    <BearingRateGraph
+      colors={COLORS}
+      maxHistoryLength={MAX_HISTORY_LENGTH}
+      {otherActors}
+    />
+    <Ocean
+      colors={COLORS}
+      {otherActors}
+      {player}
+    />
+  </div>
 </main>
 
 <style>
