@@ -9,6 +9,9 @@
 	const COLORS = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
 	const MAX_HISTORY_LENGTH = 50
 
+	//TODO heading acceleration
+	//TODO draw out as far as hypotenus of canvas
+
 	let player = new PhysicsObject({
 		maxHistoryLength: MAX_HISTORY_LENGTH,
 		positionX: 50,
@@ -70,6 +73,7 @@
     otherActors.forEach(actor => {
       actor.update(player)
       actor.addBearing(getBearing(
+				player.heading,
 				player.positionX,
 				player.positionY,
 				actor.positionX,

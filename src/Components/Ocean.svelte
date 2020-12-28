@@ -9,6 +9,12 @@
   export let player:PhysicsObject
 
   let canvas
+  let maintainPlayerPerspective = false
+  function handlePerspectiveChange() {
+    maintainPlayerPerspective = !maintainPlayerPerspective
+  }
+
+  let overlayPolarGrid = false
 
 
   let height:number = 500
@@ -27,10 +33,12 @@
       //center the canvas on the player
       ctx.translate(-expectedLeftX, -expectedTopY)
 
-      //rotate the canvas to keep the player pointing up
-      ctx.translate(player.positionX, player.positionY)
-      ctx.rotate(-player.heading * Math.PI / 180)
-      ctx.translate(-player.positionX, -player.positionY)
+      if(maintainPlayerPerspective) {
+        //rotate the canvas to keep the player pointing up
+        ctx.translate(player.positionX, player.positionY)
+        ctx.rotate(-player.heading * Math.PI / 180)
+        ctx.translate(-player.positionX, -player.positionY)
+      }
 
       //redraw the background
       ctx.clearRect(expectedLeftX, expectedTopY, width + 2, height + 2)
@@ -99,6 +107,15 @@
 </script>
 
 <main>
+  <div>
+    <label for="playerPerspectiveCheckbox">Maintain Player Perspective?</label>
+    <input
+      id="playerPerspectiveCheckbox"
+      type="checkbox"
+      bind:checked={maintainPlayerPerspective}
+      on:click{handlePerspectiveChange}
+    />
+  </div>
   <canvas
     bind:this={canvas}
     {width}
@@ -107,21 +124,5 @@
 </main>
 
 <style>
-  svg {
-    background-color: lightblue;
-  }
 
-  line {
-    stroke-width: 2px;
-  }
-
-  circle {
-    fill: none;
-    stroke-width: 2px;
-  }
-
-  #player {
-    stroke: black;
-    fill: black;
-  }
 </style>
