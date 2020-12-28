@@ -19,6 +19,7 @@
 
   let height:number = 500
   let width:number = 1000
+  $: diagonal = Math.hypot(width, height)
 
   afterUpdate(() => {
     const ctx = canvas.getContext('2d')
@@ -27,11 +28,8 @@
   	function draw() {
       ctx.save()
 
-      const expectedLeftX = player.positionX - width / 2
-      const expectedTopY = player.positionY - height / 2
-
       //center the canvas on the player
-      ctx.translate(-expectedLeftX, -expectedTopY)
+      ctx.translate(width/2 - player.positionX, height/2 - player.positionY)
 
       if(maintainPlayerPerspective) {
         //rotate the canvas to keep the player pointing up
@@ -41,30 +39,32 @@
       }
 
       //redraw the background
-      ctx.clearRect(expectedLeftX, expectedTopY, width + 2, height + 2)
+      const leftX = player.positionX - diagonal/2
+      const topY = player.positionY - diagonal/2
+      ctx.clearRect(leftX, topY, diagonal, diagonal)
       ctx.fillStyle = "lightblue"
-      ctx.fillRect(expectedLeftX, expectedTopY, width + 2, height + 2)
+      ctx.fillRect(leftX, topY, diagonal, diagonal)
 
       //grid lines
       ctx.strokeStyle = "gray"
       ctx.lineWidth = 0.5
-      const expectedRightX = expectedLeftX + width
-      const expectedBottomY = expectedTopY + height
+      const rightX = leftX + diagonal
+      const bottomY = topY + diagonal
 
-      let gridPosition = expectedLeftX
-      while(gridPosition < expectedRightX) {
+      let gridPosition = leftX
+      while(gridPosition < rightX) {
         gridPosition = Math.ceil((gridPosition + 1) / 100) * 100
         ctx.beginPath()
-        ctx.moveTo(gridPosition, expectedTopY)
-        ctx.lineTo(gridPosition, expectedBottomY)
+        ctx.moveTo(gridPosition, topY)
+        ctx.lineTo(gridPosition, bottomY)
         ctx.stroke()
       }
-      gridPosition = expectedTopY
-      while(gridPosition < expectedBottomY) {
+      gridPosition = topY
+      while(gridPosition < bottomY) {
         gridPosition = Math.ceil((gridPosition + 1) / 100) * 100
         ctx.beginPath()
-        ctx.moveTo(expectedLeftX, gridPosition)
-        ctx.lineTo(expectedRightX, gridPosition)
+        ctx.moveTo(leftX, gridPosition)
+        ctx.lineTo(rightX, gridPosition)
         ctx.stroke()
       }
 
