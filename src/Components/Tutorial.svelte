@@ -33,13 +33,17 @@
 	const interval = setInterval(run, 50)
 
   let svg
-  function mousemove(e) {
+  function onMouseMove(e) {
+    updateActorPosition(e.clientX, e.clientY)
+  }
+  function onTouchMove(e) {
+    e.preventDefault()
+    updateActorPosition(e.touches[0].clientX, e.touches[0].clientY)
+  }
+  function updateActorPosition(clientX:number, clientY:number) {
     const dimensions = svg.getBoundingClientRect()
-    const x = e.clientX - dimensions.left - fullWidth/2
-    const y = e.clientY - dimensions.top - fullHeight/2
-
-    actor.positionX = x
-    actor.positionY = y
+    actor.positionX = clientX - dimensions.left - fullWidth/2
+    actor.positionY = clientY - dimensions.top - fullHeight/2
   }
 
 
@@ -52,7 +56,7 @@
 </script>
 
 <main>
-  <svg bind:this={svg} width={fullWidth} height={fullHeight} on:mousemove={mousemove}>
+  <svg bind:this={svg} width={fullWidth} height={fullHeight} on:mousemove={onMouseMove} on:touchmove={onTouchMove}>
     <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
       <g class="grid">
         <circle cx={0} cy={0} r={halfWidth*3/4}/>
