@@ -37,6 +37,26 @@
 	).range(
 		[margin.top, margin.top + effectiveHeight]
 	)
+
+	$: pathData = otherActors.map(actor => {
+		let d = "M"
+		actor.bearingHistories.forEach((b,bearingIndex) => {
+			d += ` ${xScale(b)},${yScale(bearingIndex)}`
+
+			const nextBearing = actor.bearingHistories[bearingIndex + 1]
+			const max = Math.max(b, nextBearing)
+			const min = Math.min(b, nextBearing)
+			if(
+				max >= 180
+				&& max < 200
+				&& min < 180
+				&& min > 160
+			) {
+				d += " M"
+			}
+		})
+		return d
+	})
 </script>
 
 <main>
@@ -69,9 +89,7 @@
       {#each otherActors as actor, i}
 				{#if true}
 					<path
-						d={"M" + actor.bearingHistories.map((b,bearingIndex) =>
-							`${xScale(b)},${yScale(bearingIndex)}`
-						).join(" ")}
+						d={pathData[i]}
 						stroke={colors[i]}
 					/>
 				{/if}
