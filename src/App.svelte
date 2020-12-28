@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
-	import PhysicsObject from './Classes/PhysicsObject';
-	import BearingChartGraph from 'Components/BearingChartGraph.svelte';
-	import Ocean from 'Components/Ocean.svelte';
-	import getBearing from './utils/getBearing';
-	export let name: string;
+	import { onMount, onDestroy } from 'svelte'
+	import PhysicsObject from './Classes/PhysicsObject'
+	import BearingChartGraph from 'Components/BearingChartGraph.svelte'
+	import Ocean from 'Components/Ocean.svelte'
+	import getBearing from './utils/getBearing'
+	export let name: string
 
 	const COLORS = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
 	const MAX_HISTORY_LENGTH = 50
@@ -23,7 +23,47 @@
 		})
 	]
 
-	let b = 0
+	function onKeyDown(e) {
+		switch(e.keyCode) {
+			case 38: //up arrow
+			case 97: //w
+				player.acceleration = 1
+				break
+			case 39: //right arrow
+			case 68: //d
+				player.heading += 10
+				break
+			case 40: //down arrow
+			case 83: //s
+				player.acceleration = 0
+				break
+			case 37: //left arrow
+			case 65: //a
+				player.heading -= 10
+				break
+			default:
+		}
+	}
+
+	function onKeyUp(e) {
+		switch(e.keyCode) {
+			case 38: //up arrow
+			case 97: //w
+				player.acceleration = 0
+				break
+			// case 39: //right arrow
+			// case 68: //d
+			// 	player.heading += 10
+			// 	break
+			// case 40: //down arrow
+			// case 83: //s
+			// case 37: //left arrow
+			// case 65: //a
+			// 	player.heading -= 10
+			// 	break
+			default:
+		}
+	}
 
 	function run() {
 		player.update()
@@ -38,9 +78,19 @@
     })
 		otherActors = otherActors
 	}
-	const interval = setInterval(run, 500);
+	const interval = setInterval(run, 500)
 
-	onDestroy(() => clearInterval(interval));
+
+	onMount(() => {
+		window.addEventListener("keydown", onKeyDown)
+		window.addEventListener("keyup", onKeyUp)
+	})
+
+	onDestroy(() => {
+		clearInterval(interval)
+		window.removeEventListener("keydown", onKeyDown)
+		window.removeEventListener("keyup", onKeyUp)
+	})
 </script>
 
 <main>

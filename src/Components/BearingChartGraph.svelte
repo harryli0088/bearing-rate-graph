@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { scaleLinear } from "d3-scale"
 	import PhysicsObject from '../Classes/PhysicsObject.ts';
+	import getActorSize from '../utils/getActorSize.ts'
 
 	export let maxHistoryLength:number = 50
 	export let otherActors: PhysicsObject[] = []
@@ -82,7 +83,7 @@
         <circle
 					cx={xScale(actor.bearingHistories[0])}
 					cy={yScale(0)}
-					r={1000 / actor.distanceFromPlayer}
+					r={getActorSize(actor.distanceFromPlayer)}
 					stroke={colors[i]}
 				/>
       {/each}

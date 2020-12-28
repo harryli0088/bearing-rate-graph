@@ -31,6 +31,8 @@ export default class PhysicsObject {
     const rad = (this.heading - 90) * Math.PI / 180
     this.velocityX += this.acceleration * Math.cos(rad)
     this.velocityY += this.acceleration * Math.sin(rad)
+    this.velocityX *= 0.9
+    this.velocityY *= 0.9
     this.positionX += this.velocityX
     this.positionY += this.velocityY
 
