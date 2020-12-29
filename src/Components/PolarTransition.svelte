@@ -10,6 +10,43 @@
   $: halfHeight = height/2
 
   let svg
+
+  type LineDataType = {x1: number, y1: number, x2: number, y2: number}
+  type TransitionType = {polar: LineDataType, rect: LineDataType}
+  $: lineData = [
+    { //0
+      polar: {x1: 0, y1: -halfHeight, x2: 0, y2: 0},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //45
+      polar: {x1: 0, y1: 0, x2: 0, y2: halfHeight},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //90
+      polar: {x1: -halfWidth, y1: 0, x2: 0, y2: 0},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //135
+      polar: {x1: 0, y1: 0, x2: halfWidth, y2: 0},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //180
+      polar: {x1: -halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //225
+      polar: {x1: 0, y1: 0, x2: halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //270
+      polar: {x1: halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //315
+      polar: {x1: 0, y1: 0, x2: -halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
+      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+  ]
 </script>
 
 <main>
@@ -23,14 +60,9 @@
         <g class="grid">
           <circle cx={0} cy={0} r={halfWidth*3/4}/>
 
-          <line x1={0} y1={-halfHeight} x2={0} y2={0}/>
-          <line x1={0} y1={0} x2={0} y2={halfHeight}/>
-          <line x1={-halfWidth} y1={0} x2={0} y2={0}/>
-          <line x1={0} y1={0} x2={halfWidth} y2={0}/>
-          <line x1={-halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={0} y2={0}/>
-          <line x1={0} y1={0} x2={halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
-          <line x1={halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={0} y2={0}/>
-          <line x1={0} y1={0} x2={-halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
+          {#each lineData as line}
+            <line {...line.polar}/>
+          {/each}
 
           <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
           <text x={halfWidth} y={0} dy={-5}>90°</text>
