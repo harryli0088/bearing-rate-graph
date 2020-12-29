@@ -11,6 +11,8 @@
 	let height:number = 500
 	export let width:number = 1000
 
+	//TODO don't show anything if target is too far
+
   const margin = {
     top: 40,
     left: 100,
@@ -53,9 +55,9 @@
 			const min = Math.min(b, lastBearing)
 			if(
 				max >= 180 //if the max bearing is above 180
-				&& max < 200 //and was below 200 (to avoid skipping from 359 to 0)
+				&& max < 260 //and was below 260 (to avoid skipping from 359 to 0)
 				&& min < 180 //and the min bearing was below 180
-				&& min > 160 //and was above 160 (to avoid skipping from 359 to 0)
+				&& min > 100 //and was above 100 (to avoid skipping from 359 to 0)
 			) {
 				d += " M" //add an M to draw a discontinuous path
 			}
