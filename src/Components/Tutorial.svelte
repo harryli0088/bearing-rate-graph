@@ -2,12 +2,14 @@
 	import { onDestroy } from 'svelte'
   import PhysicsObject from '../Classes/PhysicsObject.ts'
 	import BearingRateGraph from 'Components/BearingRateGraph.svelte'
+  import Row from 'Components/Row.svelte'
 	import getBearing from '../utils/getBearing.ts'
 
-  const MAX_HISTORY_LENGTH = 50
+  const MAX_HISTORY_LENGTH = 100
 
-  let fullWidth:number = 500
-  let fullHeight:number = 500
+  let polarWidth:number = 500
+  $: fullWidth = Math.min(500, polarWidth)
+  $: fullHeight = fullWidth
   const DIAG_CONSTANT = Math.sqrt(2)/2
   const PADDING = 30
   $: width = fullWidth - 2*PADDING
@@ -18,7 +20,7 @@
 	let actor: PhysicsObject = new PhysicsObject({
     maxHistoryLength: MAX_HISTORY_LENGTH,
     positionX: 0,
-    positionY: (-fullHeight/2 + PADDING)*3/4,
+    positionY: (-Math.min(500, polarWidth)/2 + PADDING)*3/4,
   })
 
   let intervalCount = 0
@@ -51,39 +53,54 @@
 	onDestroy(() => {
 		clearInterval(interval)
 	})
+
+  let bearingRateGraphWidth:number
 </script>
 
 <main>
-  <svg bind:this={svg} width={fullWidth} height={fullHeight} on:mousemove={onMouseMove} on:touchmove={onTouchMove}>
-    <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
-      <g class="grid">
-        <circle cx={0} cy={0} r={halfWidth*3/4}/>
+  <Row>
+    <div bind:clientWidth={polarWidth}>
+      <svg
+        bind:this={svg}
+        width={fullWidth}
+        height={fullHeight}
+        on:mousemove={onMouseMove}
+        on:touchmove={onTouchMove}
+      >
+        <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
+          <g class="grid">
+            <circle cx={0} cy={0} r={halfWidth*3/4}/>
 
-        <line x1={0} y1={-halfHeight} x2={0} y2={halfHeight}/>
-        <line x1={-halfWidth} y1={0} x2={halfWidth} y2={0}/>
-        <line x1={-halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
-        <line x1={halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={-halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
+            <line x1={0} y1={-halfHeight} x2={0} y2={halfHeight}/>
+            <line x1={-halfWidth} y1={0} x2={halfWidth} y2={0}/>
+            <line x1={-halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
+            <line x1={halfWidth*DIAG_CONSTANT} y1={-halfHeight*DIAG_CONSTANT} x2={-halfWidth*DIAG_CONSTANT} y2={halfHeight*DIAG_CONSTANT}/>
 
-        <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
-        <text x={halfWidth} y={0} dy={-5}>90°</text>
-        <text x={0} y={halfHeight} dy={15}>180°</text>
-        <text x={-halfWidth} y={0} dy={-5}>270°</text>
-      </g>
+            <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
+            <text x={halfWidth} y={0} dy={-5}>90°</text>
+            <text x={0} y={halfHeight} dy={15}>180°</text>
+            <text x={-halfWidth} y={0} dy={-5}>270°</text>
+          </g>
 
-      <g>
-        <line x1={0} y1={0} x2={actor.positionX} y2={actor.positionY} stroke="red" stroke-width="2px"/>
-        <circle cx={actor.positionX} cy={actor.positionY} r={10} fill="none" stroke="red" stroke-width="2px"/>
-      </g>
-    </g>
-  </svg>
+          <g>
+            <line x1={0} y1={0} x2={actor.positionX} y2={actor.positionY} stroke="red" stroke-width="2px"/>
+            <circle cx={actor.positionX} cy={actor.positionY} r={10} fill="none" stroke="red" stroke-width="2px"/>
+          </g>
+        </g>
+      </svg>
+    </div>
 
-	<BearingRateGraph
-		colors={["red"]}
-    {intervalCount}
-    intervalTime={INTERVAL_TIME}
-		maxHistoryLength={MAX_HISTORY_LENGTH}
-		otherActors={[actor]}
-	/>
+  	<div bind:clientWidth={bearingRateGraphWidth}>
+      <BearingRateGraph
+        colors={["red"]}
+        {intervalCount}
+        intervalTime={INTERVAL_TIME}
+        maxHistoryLength={MAX_HISTORY_LENGTH}
+        otherActors={[actor]}
+        width={bearingRateGraphWidth}
+      />
+    </div>
+  </Row>
 </main>
 
 <style>

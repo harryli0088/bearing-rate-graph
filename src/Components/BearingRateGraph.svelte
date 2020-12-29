@@ -8,9 +8,9 @@
 	export let intervalTime:number = 50
 	export let maxHistoryLength:number = 50
 	export let otherActors: PhysicsObject[] = []
+	let height:number = 500
+	export let width:number = 1000
 
-  let height:number = 500
-  let width:number = 1000
   const margin = {
     top: 40,
     left: 100,

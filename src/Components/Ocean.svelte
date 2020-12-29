@@ -8,19 +8,15 @@
   export let colors: string[]
   export let otherActors:PhysicsObject[]
   export let player:PhysicsObject
+  export let width:number = 1000
+
+  let controlBarHeight:number = 100
+  $: height = 500 - controlBarHeight
+  $: diagonal = Math.hypot(width, height) //we need this to make sure we draw a background big enough to cover the screen, even when the background is rotated
 
   let canvas
   let maintainPlayerPerspective = false
-  function handlePerspectiveChange() {
-    maintainPlayerPerspective = !maintainPlayerPerspective
-  }
-
   let overlayPolarGrid = false
-
-
-  let height:number = 500
-  let width:number = 1000
-  $: diagonal = Math.hypot(width, height) //we need this to make sure we draw a background big enough to cover the screen, even when the background is rotated
 
   function incrementGridPosition(position:number) {
     return Math.ceil((position + 1) / 100) * 100
@@ -101,13 +97,12 @@
 </script>
 
 <main>
-  <div>
+  <div bind:clientHeight={controlBarHeight}>
     <label for="playerPerspectiveCheckbox">Maintain Player Perspective?</label>
     <input
       id="playerPerspectiveCheckbox"
       type="checkbox"
       bind:checked={maintainPlayerPerspective}
-      on:click{handlePerspectiveChange}
     />
   </div>
   <canvas

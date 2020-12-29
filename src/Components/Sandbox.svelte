@@ -2,11 +2,12 @@
 	import { onDestroy } from 'svelte'
 	import PhysicsObject from '../Classes/PhysicsObject.ts'
 	import BearingRateGraph from 'Components/BearingRateGraph.svelte'
-	import Ocean from 'Components/Ocean.svelte'
+  import Ocean from 'Components/Ocean.svelte'
+	import Row from 'Components/Row.svelte'
 	import getBearing from '../utils/getBearing.ts'
 
 	const COLORS = ["#EC7063", "#F39C12", "#F1C40F", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
-	const MAX_HISTORY_LENGTH = 50
+	const MAX_HISTORY_LENGTH = 100
 
 	let player = new PhysicsObject({
 		maxHistoryLength: MAX_HISTORY_LENGTH,
@@ -97,23 +98,40 @@
 	onDestroy(() => {
 		clearInterval(interval)
 	})
+
+  let bearingRateGraphWidth:number
+  let oceanWidth:number
 </script>
 
 <main>
-	<div tabindex={1} on:focus={onFocus} on:blur={onBlur} on:keydown={onKeyDown} on:keyup={onKeyUp}>
-    <BearingRateGraph
-      colors={COLORS}
-      {intervalCount}
-      intervalTime={INTERVAL_TIME}
-      maxHistoryLength={MAX_HISTORY_LENGTH}
-      {otherActors}
-    />
-    <Ocean
-      colors={COLORS}
-      {otherActors}
-      {player}
-    />
-  </div>
+  <Row>
+    <div
+      bind:clientWidth={oceanWidth}
+      on:blur={onBlur}
+      on:focus={onFocus}
+      on:keydown={onKeyDown}
+      on:keyup={onKeyUp}
+      tabindex={1}
+    >
+      <Ocean
+        colors={COLORS}
+        {otherActors}
+        {player}
+        width={oceanWidth}
+      />
+    </div>
+
+    <div bind:clientWidth={bearingRateGraphWidth}>
+      <BearingRateGraph
+        colors={COLORS}
+        {intervalCount}
+        intervalTime={INTERVAL_TIME}
+        maxHistoryLength={MAX_HISTORY_LENGTH}
+        {otherActors}
+        width={bearingRateGraphWidth}
+      />
+    </div>
+  </Row>
 </main>
 
 <style>
