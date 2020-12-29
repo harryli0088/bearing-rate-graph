@@ -6,12 +6,11 @@
 
   const MAX_HISTORY_LENGTH = 100
 
-  let polarWidth:number = 500
   const PADDING = 30
 	let actor: PhysicsObject = new PhysicsObject({
     maxHistoryLength: MAX_HISTORY_LENGTH,
     positionX: 0,
-    positionY: (-Math.min(500, polarWidth)/2 + PADDING)*3/4,
+    positionY: (-500/2 + PADDING)*3/4,
   })
 
   let currentBearing = 0
@@ -26,22 +25,34 @@
 
 <main>
   <Row>
-    <div class="polarContainer" bind:clientWidth={polarWidth}>
-      <Polar
-        {actor}
-        fullWidth={polarWidth}
-        {updateActorPositionCallback}
-      />
-    </div>
+    <Polar
+      {actor}
+      {updateActorPositionCallback}
+    />
 
-  	<div>
-      <p>Bearing of Target: <b>{parseInt(currentBearing)}°</b></p>
+  	<div class="showBearing">
+      <div>
+        <div class="label">Bearing of Target: </div>
+        <br/>
+        <div class="bearingValue"><b>{parseInt(currentBearing)}°</b></div>
+      </div>
     </div>
   </Row>
 </main>
 
 <style>
-  .polarContainer {
+  .showBearing {
+    display:flex;
+    align-items: center;
+    justify-content:center;
     text-align: center;
+  }
+
+  .label {
+    font-size: 1.5em;
+  }
+
+  .bearingValue {
+    font-size: 5em;
   }
 </style>

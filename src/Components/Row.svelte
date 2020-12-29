@@ -11,7 +11,7 @@
 	.row {
 		display: flex;
 	}
-  .row > :global(div) {
+  .row > :global(main), .row > :global(div) {
     width: 50%;
   }
 
@@ -19,7 +19,7 @@
     .row {
   		flex-direction: column;
   	}
-    .row > :global(div) {
+    .row > :global(main), .row > :global(div) {
       width: 100%;
     }
   }

@@ -3,6 +3,7 @@
 	import Tutorial from 'Components/Tutorial.svelte'
 	import Sandbox from 'Components/Sandbox.svelte'
 	import SimplePolorExample from 'Components/SimplePolorExample.svelte'
+	import PolarTransition from 'Components/PolarTransition.svelte'
 </script>
 
 <main>
@@ -23,6 +24,8 @@
 
 	<section>
 		<p>What if we wanted to visualize how a target moves relative to us <b>over time</b>? We can "unwrap" the polar coordinate graph into a rectangle, then add a vertical time axis. This visualization, called a <b>bearing rate graph</b>, represents the bearings of targets as they move around us over time.</p>
+
+		<PolarTransition/>
 	</section>
 
 	<section>

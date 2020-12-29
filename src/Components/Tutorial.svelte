@@ -13,7 +13,7 @@
 	let actor: PhysicsObject = new PhysicsObject({
     maxHistoryLength: MAX_HISTORY_LENGTH,
     positionX: 0,
-    positionY: (-Math.min(500, polarWidth)/2 + PADDING)*3/4,
+    positionY: (-500/2 + PADDING)*3/4,
   })
 
   let intervalCount = 0
@@ -37,12 +37,7 @@
 
 <main>
   <Row>
-    <div class="polarContainer" bind:clientWidth={polarWidth}>
-      <Polar
-        {actor}
-        fullWidth={polarWidth}
-      />
-    </div>
+    <Polar {actor}/>
 
   	<div bind:clientWidth={bearingRateGraphWidth}>
       <BearingRateGraph
