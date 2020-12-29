@@ -11,4 +11,12 @@ body {
 	background-color: #283747;
 	color: white;
 	fill: white;
+	letter-spacing: 1px;
+}
+
+a {
+  color: #AED6F1;
+}
+a:visited {
+	color: #D2B4DE;
 }

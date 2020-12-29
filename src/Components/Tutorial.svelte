@@ -8,11 +8,11 @@
   const MAX_HISTORY_LENGTH = 100
 
   let polarWidth:number = 500
-  $: fullWidth = Math.min(500, polarWidth)
-  $: fullHeight = fullWidth
+  $: centeredWidth = Math.min(500, polarWidth)
+  $: fullHeight = centeredWidth
   const DIAG_CONSTANT = Math.sqrt(2)/2
   const PADDING = 30
-  $: width = fullWidth - 2*PADDING
+  $: width = centeredWidth - 2*PADDING
   $: height = fullHeight - 2*PADDING
   $: halfWidth = width/2
   $: halfHeight = height/2
@@ -46,7 +46,7 @@
   }
   function updateActorPosition(clientX:number, clientY:number) {
     const dimensions = svg.getBoundingClientRect()
-    actor.positionX = clientX - dimensions.left - fullWidth/2
+    actor.positionX = clientX - dimensions.left - polarWidth/2
     actor.positionY = clientY - dimensions.top - fullHeight/2
   }
 
