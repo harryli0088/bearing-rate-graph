@@ -21,7 +21,7 @@
     positionY: (-fullHeight/2 + PADDING)*3/4,
   })
 
-
+  let intervalCount = 0
   function run() {
     actor.addBearing(getBearing(
       0, 0, 0,
@@ -29,6 +29,7 @@
       actor.positionY,
     ))
 		actor = actor
+    intervalCount++
 	}
   const INTERVAL_TIME = 50
 	const interval = setInterval(run, INTERVAL_TIME)
@@ -78,6 +79,7 @@
 
 	<BearingRateGraph
 		colors={["red"]}
+    {intervalCount}
     intervalTime={INTERVAL_TIME}
 		maxHistoryLength={MAX_HISTORY_LENGTH}
 		otherActors={[actor]}

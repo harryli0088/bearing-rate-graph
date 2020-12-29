@@ -68,6 +68,7 @@
 		}
 	}
 
+  let intervalCount = 0
 	function run() {
 		player.update()
     otherActors.forEach(actor => {
@@ -81,6 +82,7 @@
 			))
     })
 		otherActors = otherActors
+    intervalCount++
 	}
 
   let interval = -1
@@ -101,6 +103,7 @@
 	<div tabindex={1} on:focus={onFocus} on:blur={onBlur} on:keydown={onKeyDown} on:keyup={onKeyUp}>
     <BearingRateGraph
       colors={COLORS}
+      {intervalCount}
       intervalTime={INTERVAL_TIME}
       maxHistoryLength={MAX_HISTORY_LENGTH}
       {otherActors}

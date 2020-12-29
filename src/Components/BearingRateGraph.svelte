@@ -4,6 +4,7 @@
 	import getActorSize from '../utils/getActorSize.ts'
 
 	export let colors:string[]
+	export let intervalCount: number = 0
 	export let intervalTime:number = 50
 	export let maxHistoryLength:number = 50
 	export let otherActors: PhysicsObject[] = []
@@ -66,11 +67,30 @@
 		return d //return the path string
 	})
 
-	$: timeSpan = maxHistoryLength * intervalTime
+	$: timeSpanSeconds = maxHistoryLength * intervalTime / 1000
+	$: timeGridLines = (() => {
+		const indices = []
+		const increment = Math.floor(maxHistoryLength / timeSpanSeconds)
+
+		let currentIndex = intervalCount % increment
+		while(currentIndex < maxHistoryLength) {
+			indices.push(currentIndex)
+
+			currentIndex += increment
+		}
+
+		return indices
+	})()
 </script>
 
 <main>
 	<svg {width} height={height}>
+		<g>
+			{#each timeGridLines as timeIndex}
+				<line x1={margin.left} y1={yScale(timeIndex)} x2={margin.left + effectiveWidth} y2={yScale(timeIndex)}/>
+			{/each}
+		</g>
+
     <g>
       {#each bearingLabels as label}
         <text
@@ -89,7 +109,7 @@
 			<line x1={margin.left - 15} y1={yScale(0)} x2={margin.left} y2={yScale(0)}/>
 			<line x1={margin.left} y1={yScale(0)} x2={margin.left} y2={yBottom}/>
 			<line x1={margin.left - 15} y1={yBottom} x2={margin.left} y2={yBottom}/>
-			<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{(timeSpan/1000).toFixed(1)} sec</text>
+			<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{(timeSpanSeconds).toFixed(1)} sec</text>
 			<text x={margin.left - 20} y={yBottom} dy={10} text-anchor="end">ago</text>
 		</g>
 
