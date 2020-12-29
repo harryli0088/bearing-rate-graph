@@ -98,15 +98,11 @@
 	onDestroy(() => {
 		clearInterval(interval)
 	})
-
-  let bearingRateGraphWidth:number
-  let oceanWidth:number
 </script>
 
 <main>
   <Row>
     <div
-      bind:clientWidth={oceanWidth}
       on:blur={onBlur}
       on:focus={onFocus}
       on:keydown={onKeyDown}
@@ -117,20 +113,16 @@
         colors={COLORS}
         {otherActors}
         {player}
-        width={oceanWidth}
       />
     </div>
 
-    <div bind:clientWidth={bearingRateGraphWidth}>
-      <BearingRateGraph
-        colors={COLORS}
-        {intervalCount}
-        intervalTime={INTERVAL_TIME}
-        maxHistoryLength={MAX_HISTORY_LENGTH}
-        {otherActors}
-        width={bearingRateGraphWidth}
-      />
-    </div>
+		<BearingRateGraph
+			colors={COLORS}
+			{intervalCount}
+			intervalTime={INTERVAL_TIME}
+			maxHistoryLength={MAX_HISTORY_LENGTH}
+			{otherActors}
+		/>
   </Row>
 </main>
 

@@ -8,8 +8,8 @@
   export let colors: string[]
   export let otherActors:PhysicsObject[]
   export let player:PhysicsObject
-  export let width:number = 1000
 
+  let width:number = 1000
   let controlBarHeight:number = 100
   $: height = 500 - controlBarHeight
   $: diagonal = Math.hypot(width, height) //we need this to make sure we draw a background big enough to cover the screen, even when the background is rotated
@@ -97,19 +97,21 @@
 </script>
 
 <main>
-  <div class="controlBar" bind:clientHeight={controlBarHeight}>
-    <label for="playerPerspectiveCheckbox">Rotate with Player's Perspective:</label>
-    <input
-      id="playerPerspectiveCheckbox"
-      type="checkbox"
-      bind:checked={maintainPlayerPerspective}
+  <div bind:clientWidth={width}>
+    <div class="controlBar" bind:clientHeight={controlBarHeight}>
+      <label for="playerPerspectiveCheckbox">Rotate with Player's Perspective:</label>
+      <input
+        id="playerPerspectiveCheckbox"
+        type="checkbox"
+        bind:checked={maintainPlayerPerspective}
+      />
+    </div>
+    <canvas
+      bind:this={canvas}
+      {width}
+      {height}
     />
   </div>
-  <canvas
-    bind:this={canvas}
-    {width}
-    {height}
-  />
 </main>
 
 <style>

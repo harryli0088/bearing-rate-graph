@@ -9,7 +9,7 @@
 	export let maxHistoryLength:number = 50
 	export let otherActors: PhysicsObject[] = []
 	let height:number = 500
-	export let width:number = 1000
+	let width:number = 1000
 
 	//TODO don't show anything if target is too far
 
@@ -87,68 +87,70 @@
 </script>
 
 <main>
-	<svg {width} height={height}>
-		<g>
-			{#each timeGridIndices as timeIndex}
-				<line x1={margin.left} y1={yScale(timeIndex)} x2={margin.left + effectiveWidth} y2={yScale(timeIndex)}/>
-			{/each}
-		</g>
+	<div bind:clientWidth={width}>
+		<svg {width} height={height}>
+			<g>
+				{#each timeGridIndices as timeIndex}
+					<line x1={margin.left} y1={yScale(timeIndex)} x2={margin.left + effectiveWidth} y2={yScale(timeIndex)}/>
+				{/each}
+			</g>
 
-    <g>
-      {#each bearingLabels as label}
-        <text
-          dy={-15}
-          text-anchor="middle"
-          x={label.x + margin.left}
-          y={margin.top}
-        >
-          {label.text}°
-        </text>
-      {/each}
-    </g>
+	    <g>
+	      {#each bearingLabels as label}
+	        <text
+	          dy={-15}
+	          text-anchor="middle"
+	          x={label.x + margin.left}
+	          y={margin.top}
+	        >
+	          {label.text}°
+	        </text>
+	      {/each}
+	    </g>
 
-		<g transform="translate(-20,0)">
-			<text x={margin.left - 20} y={yScale(0)} dy={5} text-anchor="end">Now</text>
-			<line class="axis" x1={margin.left - 15} y1={yScale(0)} x2={margin.left} y2={yScale(0)}/>
-			<line class="axis" x1={margin.left} y1={yScale(0)} x2={margin.left} y2={yBottom}/>
-			<line class="axis" x1={margin.left - 15} y1={yBottom} x2={margin.left} y2={yBottom}/>
-			<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{(timeSpanSeconds).toFixed(1)} sec</text>
-			<text x={margin.left - 20} y={yBottom} dy={10} text-anchor="end">ago</text>
-		</g>
+			<g transform="translate(-20,0)">
+				<text x={margin.left - 20} y={yScale(0)} dy={5} text-anchor="end">Now</text>
+				<line class="axis" x1={margin.left - 15} y1={yScale(0)} x2={margin.left} y2={yScale(0)}/>
+				<line class="axis" x1={margin.left} y1={yScale(0)} x2={margin.left} y2={yBottom}/>
+				<line class="axis" x1={margin.left - 15} y1={yBottom} x2={margin.left} y2={yBottom}/>
+				<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{(timeSpanSeconds).toFixed(1)} sec</text>
+				<text x={margin.left - 20} y={yBottom} dy={10} text-anchor="end">ago</text>
+			</g>
 
-    <g>
-      {#each bearingLabels as label}
-        <line
-					x1={label.x + margin.left}
-					x2={label.x + margin.left}
-					y1={yTop}
-					y2={yBottom}
-				/>
-      {/each}
-    </g>
+	    <g>
+	      {#each bearingLabels as label}
+	        <line
+						x1={label.x + margin.left}
+						x2={label.x + margin.left}
+						y1={yTop}
+						y2={yBottom}
+					/>
+	      {/each}
+	    </g>
 
-		<g>
-      {#each otherActors as actor, i}
-				{#if true}
-					<path
-						d={pathData[i]}
+			<g>
+	      {#each otherActors as actor, i}
+					{#if true}
+						<path
+							d={pathData[i]}
+							stroke={colors[i]}
+						/>
+					{/if}
+	      {/each}
+	    </g>
+
+			<g>
+	      {#each otherActors as actor, i}
+	        <circle
+						cx={xScale(actor.bearingHistories[0])}
+						cy={yScale(0)}
+						r={getActorSize(actor.distanceFromPlayer)}
 						stroke={colors[i]}
 					/>
-				{/if}
-      {/each}
-    </g>
-
-		<g>
-      {#each otherActors as actor, i}
-        <circle
-					cx={xScale(actor.bearingHistories[0])}
-					cy={yScale(0)}
-					r={getActorSize(actor.distanceFromPlayer)}
-					stroke={colors[i]}
-				/>
-      {/each}
-    </g>
-  </svg>
+	      {/each}
+	    </g>
+	  </svg>
+	</div>
 </main>
 
 <style>

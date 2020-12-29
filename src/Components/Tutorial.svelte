@@ -39,16 +39,14 @@
   <Row>
     <Polar {actor}/>
 
-  	<div bind:clientWidth={bearingRateGraphWidth}>
-      <BearingRateGraph
-        colors={["red"]}
-        {intervalCount}
-        intervalTime={INTERVAL_TIME}
-        maxHistoryLength={MAX_HISTORY_LENGTH}
-        otherActors={[actor]}
-        width={bearingRateGraphWidth}
-      />
-    </div>
+		<BearingRateGraph
+			colors={["red"]}
+			{intervalCount}
+			intervalTime={INTERVAL_TIME}
+			maxHistoryLength={MAX_HISTORY_LENGTH}
+			otherActors={[actor]}
+			width={bearingRateGraphWidth}
+		/>
   </Row>
 </main>
 
