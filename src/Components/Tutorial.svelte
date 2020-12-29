@@ -59,15 +59,15 @@
 
 <main>
   <Row>
-    <div bind:clientWidth={polarWidth}>
+    <div class="polarContainer" bind:clientWidth={polarWidth}>
       <svg
         bind:this={svg}
-        width={fullWidth}
+        width={polarWidth}
         height={fullHeight}
         on:mousemove={onMouseMove}
         on:touchmove={onTouchMove}
       >
-        <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
+        <g transform={`translate(${polarWidth/2},${fullHeight/2})`}>
           <g class="grid">
             <circle cx={0} cy={0} r={halfWidth*3/4}/>
 
@@ -104,8 +104,12 @@
 </main>
 
 <style>
+  .polarContainer {
+    text-align: center;
+  }
+
   svg {
-    border: 1px solid black;
+    background-color: #002D62;
   }
 
   .grid line, .grid circle {

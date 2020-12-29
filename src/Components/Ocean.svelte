@@ -97,8 +97,8 @@
 </script>
 
 <main>
-  <div bind:clientHeight={controlBarHeight}>
-    <label for="playerPerspectiveCheckbox">Maintain Player Perspective?</label>
+  <div class="controlBar" bind:clientHeight={controlBarHeight}>
+    <label for="playerPerspectiveCheckbox">Rotate with Player's Perspective:</label>
     <input
       id="playerPerspectiveCheckbox"
       type="checkbox"
@@ -113,5 +113,8 @@
 </main>
 
 <style>
-
+  .controlBar {
+    padding: 1em;
+    background: #222;
+  }
 </style>

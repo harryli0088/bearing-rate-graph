@@ -12,5 +12,7 @@
 <style>
 	main {
 		margin: 0 auto;
+		overflow-x: hidden;
+		padding: 1em;
 	}
 </style>
