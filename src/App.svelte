@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte'
 	import Tutorial from 'Components/Tutorial.svelte'
 	import Sandbox from 'Components/Sandbox.svelte'
+	import SimplePolorExample from 'Components/SimplePolorExample.svelte'
 </script>
 
 <main>
@@ -15,12 +16,16 @@
 	<section></section>
 
 	<section>
-		<p>Submarines can use <a href="https://en.wikipedia.org/wiki/Sonar" target="_blank" rel="noopener noreferrer">sonar</a> to locate the relative angular position of nearby vessels. A target's <b>bearing</b> is simply the relative angular position of the target represented in degrees. We can represent the front of the submarine as being 0°, then move 360° clockwise around the ship to complete a full circle. So 90° is right, 180° is behind, and 270° is left.</p>
+		<p>Submarines can use <a href="https://en.wikipedia.org/wiki/Sonar" target="_blank" rel="noopener noreferrer">sonar</a> to locate the relative angular position of nearby vessels. A target's <b>bearing</b> is simply the relative angular position of the target. We can represent the front of the submarine as being 0°, then move 360° clockwise around the ship to complete a full circle. So 90° is right, 180° is behind, and 270° is left.</p>
+
+		<SimplePolorExample/>
 	</section>
 
 	<section>
 		<p>What if we wanted to visualize how a target moves relative to us <b>over time</b>? We can "unwrap" the polar coordinate graph into a rectangle, then add a vertical time axis. This visualization, called a <b>bearing rate graph</b>, represents the bearings of targets as they move around us over time.</p>
+	</section>
 
+	<section>
 		<p>In the example below, you can change the bearing of the target and see how the bearing rate graph changes!</p>
 
 		<Tutorial/>
