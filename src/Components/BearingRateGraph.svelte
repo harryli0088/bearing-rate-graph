@@ -68,25 +68,26 @@
 	})
 
 	$: timeSpanSeconds = maxHistoryLength * intervalTime / 1000
-	$: timeGridLines = (() => {
-		const indices = []
-		const increment = Math.floor(maxHistoryLength / timeSpanSeconds)
+	$: timeGridIndices = (() => { //self involking function returns an array of moving time indices that are 1 second apart
+		const indices = [] //initialize an empty array
+		const timeIndiciesPerSecond = Math.floor(maxHistoryLength / timeSpanSeconds) //determine how many time indices are in one second
 
-		let currentIndex = intervalCount % increment
-		while(currentIndex < maxHistoryLength) {
-			indices.push(currentIndex)
-
-			currentIndex += increment
+		for(
+			let currentIndex = intervalCount % timeIndiciesPerSecond; //mod the interval count by the timeIndiciesPerSecond
+			currentIndex < maxHistoryLength; //while the current index has not reached or exceeded the max history length
+			currentIndex += timeIndiciesPerSecond //timeIndiciesPerSecond the current index
+		) {
+			indices.push(currentIndex) //push this index into the array
 		}
 
-		return indices
+		return indices //return the array
 	})()
 </script>
 
 <main>
 	<svg {width} height={height}>
 		<g>
-			{#each timeGridLines as timeIndex}
+			{#each timeGridIndices as timeIndex}
 				<line x1={margin.left} y1={yScale(timeIndex)} x2={margin.left + effectiveWidth} y2={yScale(timeIndex)}/>
 			{/each}
 		</g>
