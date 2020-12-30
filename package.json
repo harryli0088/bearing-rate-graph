@@ -8,7 +8,7 @@
     "validate": "svelte-check",
     "test": "jest --watch",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d public",
+    "deploy": "gh-pages -d public"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -38,5 +38,6 @@
   "dependencies": {
     "d3": "^6.3.1",
     "sirv-cli": "^1.0.0"
-  }
+  },
+  "homepage": "https://github.com/harryli0088/bearing-rate-graph"
 }
