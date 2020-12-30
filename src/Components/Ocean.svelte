@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { beforeUpdate, afterUpdate } from 'svelte'
+  import { afterUpdate } from 'svelte'
 
   import PhysicsObject from '../Classes/PhysicsObject.ts'
   import drawLine from '../utils/canvas/drawLine.ts'
-  import getActorSize from '../utils/getActorSize.ts'
   import { DEG_PER_RAD } from '../utils/consts.ts'
 
   export let colors: string[]
@@ -85,7 +84,7 @@
       otherActors.forEach((actor, i) => {
         ctx.strokeStyle = colors[i]
         ctx.beginPath()
-        ctx.arc(actor.positionX, actor.positionY, getActorSize(actor.distanceFromPlayer), 0, 2 * Math.PI)
+        ctx.arc(actor.positionX, actor.positionY, actor.getSize(), 0, 2 * Math.PI)
         ctx.stroke()
       })
 

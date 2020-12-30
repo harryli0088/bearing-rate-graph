@@ -102,7 +102,8 @@
 	function run() {
 		player.update()
     otherActors.forEach((actor, actorIndex) => {
-      actor.update(player)
+      actor.update()
+			actor.updateDistanceFromPlayer(player)
       actor.addBearing(getBearing(
 				player.heading,
 				player.positionX,

@@ -1,4 +1,4 @@
-import { DEG_PER_RAD } from '../utils/consts.ts'
+import { DEG_PER_RAD } from 'utils/consts'
 
 export default class PhysicsObject {
   acceleration:number
@@ -38,7 +38,7 @@ export default class PhysicsObject {
     this.velocityY = options.velocityY ?? 0
   }
 
-  update = (player?:PhysicsObject) => {
+  update = () => {
     //update the angular/heading data
     this.angularVelocity += this.angularAcceleration
     this.angularVelocity *= 0.9 //simple model for drag
@@ -52,15 +52,16 @@ export default class PhysicsObject {
     this.velocityY *= 0.9
     this.positionX += this.velocityX
     this.positionY += this.velocityY
-
-    //if applicable, update the distance this object is from the player
-    if(player) {
-      this.distanceFromPlayer = Math.hypot(
-        this.positionX - player.positionX,
-        this.positionY - player.positionY,
-      )
-    }
   }
+
+  updateDistanceFromPlayer = (player:PhysicsObject) => {
+    this.distanceFromPlayer = Math.hypot(
+      this.positionX - player.positionX,
+      this.positionY - player.positionY,
+    )
+  }
+
+  getSize = () => 1000 / (this.distanceFromPlayer + 10)
 
   addBearing = (bearing: number) => {
     this.bearingHistories.unshift(bearing)

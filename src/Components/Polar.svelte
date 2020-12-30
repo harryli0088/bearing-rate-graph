@@ -16,6 +16,8 @@
     positionY: -10,
   })
 
+  const dummyPlayer = new PhysicsObject({})
+
   let svg
   function onMouseMove(e) {
     updateActorPosition(e.clientX, e.clientY)
@@ -29,6 +31,8 @@
     const dimensions = svg.getBoundingClientRect()
     actor.positionX = clientX - dimensions.left - fullWidth/2
     actor.positionY = clientY - dimensions.top - fullHeight/2
+
+    actor.updateDistanceFromPlayer(dummyPlayer)
 
     updateActorPositionCallback()
   }
@@ -61,7 +65,7 @@
 
         <g>
           <line x1={0} y1={0} x2={actor.positionX} y2={actor.positionY} stroke="red" stroke-width="2px"/>
-          <circle cx={actor.positionX} cy={actor.positionY} r={10} fill="none" stroke="red" stroke-width="2px"/>
+          <circle cx={actor.positionX} cy={actor.positionY} r={actor.getSize()} fill="none" stroke="red" stroke-width="2px"/>
         </g>
       </g>
     </svg>

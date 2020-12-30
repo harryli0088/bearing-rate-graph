@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { scaleLinear } from "d3-scale"
-	import PhysicsObject from '../Classes/PhysicsObject.ts';
-	import getActorSize from '../utils/getActorSize.ts'
+	import PhysicsObject from '../Classes/PhysicsObject.ts'
 
 	export let colors:string[]
 	export let intervalCount: number = 0
@@ -144,7 +143,7 @@
 	        <circle
 						cx={xScale(actor.bearingHistories[0])}
 						cy={yScale(0)}
-						r={getActorSize(actor.distanceFromPlayer)}
+						r={actor.getSize()}
 						stroke={colors[i]}
 					/>
 	      {/each}

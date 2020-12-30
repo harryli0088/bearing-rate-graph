@@ -1,4 +1,4 @@
-import { DEG_PER_RAD } from './consts.ts'
+import { DEG_PER_RAD } from 'utils/consts'
 
 /**
  * given the origin heading and (origin and target positions)
