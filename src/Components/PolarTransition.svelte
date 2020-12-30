@@ -25,7 +25,7 @@
 
   const interval = setInterval(() => {
     animation.set($animation===1 ? 0 : 1)
-  }, 2000)
+  }, 3000)
   onDestroy(() => clearInterval(interval))
 
   $: x2Scale = scaleLinear().domain(
@@ -61,7 +61,7 @@
   for(let i=0; i<180; ++i) {
     circleDegrees.push(i)
   }
-  $: circlePathRadius = halfWidth * (3 + $animation) / 4
+  $: circlePathRadius = halfWidth * (12 + 3*$animation) / 16
   $: circlePath = circleDegrees.reduce(
     (d, degree) => {
       const { x1, y1 } = getLineDataFromAngle(degree, circlePathRadius)
@@ -71,22 +71,34 @@
     "M"
   )
 
-  const ticks:{angle:number,label:string}[] = [
-    {angle:180.1, label: "180"},
-    {angle:225, label: ""},
-    {angle:270, label: "270"},
-    {angle:315, label: ""},
-    {angle:0, label: "0"},
-    {angle:45, label: ""},
-    {angle:90, label: "90"},
-    {angle:135, label: ""},
-    {angle:179.9, label: "180"},
+  const ticks:{angle:number,label:string, dy:number}[] = [
+    {angle:180.1, label: "180", dy: 15},
+    {angle:225,   label: "",    dy: 0},
+    {angle:270,   label: "270", dy: -5},
+    {angle:315,   label: "",    dy: 0},
+    {angle:0,     label: "",    dy: 0},
+    {angle:45,    label: "",    dy: 0},
+    {angle:90,    label: "90",  dy: -5},
+    {angle:135,   label: "",    dy: 0},
+    {angle:179.999, label: "180", dy: 15},
   ]
 
   $: lineData = ticks.map(t => getLineDataFromAngle(t.angle))
 
+  const ticksWithLabels = ticks.filter(t => t.label.length > 0)
+  const tickEndDy = -5
+  $: textData = ticksWithLabels.map(t => {
+    const { x1, y1 } = getLineDataFromAngle(t.angle)
 
-  $: proxyValue = $animation * 2
+    return {
+      attr: {
+        x: x1,
+        y: y1,
+        dy: tickEndDy*$animation + (1 - $animation)*t.dy
+      },
+      text: t.label,
+    }
+  })
 
 </script>
 
@@ -108,13 +120,13 @@
           <line x1={x2Scale(180)} y1={y2} x2={x2Scale(179.9)} {y2}/>
 
           <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
-          <text x={halfWidth} y={0} dy={-5}>90°</text>
-          <text x={0} y={halfHeight} dy={15}>180°</text>
-          <text x={-halfWidth} y={0} dy={-5}>270°</text>
+          {#each textData as text}
+            <text {...text.attr}>{text.text}</text>
+          {/each}
         </g>
       </g>
     </svg>
-    <div>{Math.round(100*$animation)}, {Math.round(100*proxyValue)}</div>
+    <div>{Math.round(100*$animation)}</div>
   </div>
 </main>
 
