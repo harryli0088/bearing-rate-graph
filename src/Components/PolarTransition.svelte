@@ -4,6 +4,7 @@
   import { tweened } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
   import { scaleLinear } from "d3-scale"
+  import { DEG_PER_RAD } from '../utils/consts.ts'
 
   export let fullWidth:number = 500
   $: centeredWidth = Math.min(500, fullWidth)
@@ -42,7 +43,7 @@
 
   $: getLineDataFromAngle = (angle, radius=halfWidth) => {
     const x2 = x2Scale(angle)
-    const theta = thetaScale(angle) * degToRadFactor
+    const theta = thetaScale(angle) / DEG_PER_RAD
 
     return {
       x1: x2 + radius * Math.sin(theta),
@@ -50,9 +51,6 @@
       x2, y2,
     }
   }
-
-
-  const degToRadFactor = Math.PI/180
 
   const circleDegrees:number[] = []
   for(let i=180; i<360; ++i) {

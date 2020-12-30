@@ -1,3 +1,5 @@
+import { DEG_PER_RAD } from '../utils/consts.ts'
+
 export default class PhysicsObject {
   acceleration:number
   angularAcceleration: number
@@ -43,7 +45,7 @@ export default class PhysicsObject {
     this.incrementHeading(this.angularVelocity)
 
     //update the coordinate data
-    const rad = (this.heading - 90) * Math.PI / 180
+    const rad = (this.heading - 90) / DEG_PER_RAD
     this.velocityX += this.acceleration * Math.cos(rad)
     this.velocityY += this.acceleration * Math.sin(rad)
     this.velocityX *= 0.9 //simple model for drag

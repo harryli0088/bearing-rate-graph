@@ -1,3 +1,5 @@
+import { DEG_PER_RAD } from './consts.ts'
+
 /**
  * given the origin heading and (origin and target positions)
  * return the target's bearing from the origin in degrees
@@ -20,7 +22,7 @@ export default function getBearing(
   let angle = Math.atan2( //get the angle from the origin to the target
     targetX - originX,
     originY - targetY
-  ) * 180 / Math.PI //convert to degrees
+  ) * DEG_PER_RAD //convert to degrees
 
   angle -= originHeading //subtract the origin's heading
 

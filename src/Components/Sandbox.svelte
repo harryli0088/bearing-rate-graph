@@ -5,8 +5,9 @@
   import Ocean from 'Components/Ocean.svelte'
 	import Row from 'Components/Row.svelte'
 	import getBearing from '../utils/getBearing.ts'
+	import { DEG_PER_RAD } from '../utils/consts.ts'
 
-	const COLORS = ["#EC7063", "#F39C12", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"]
+	const COLORS = ["#EC7063", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"] //"#F39C12", "#F1C40F"
 	const MAX_HISTORY_LENGTH = 100
 
 	let player = new PhysicsObject({
@@ -23,42 +24,27 @@
 			positionY: -75,
 		}),
 		new PhysicsObject({
-			acceleration: 0.25,
-			label: "Vertical Loops",
-			maxHistoryLength: MAX_HISTORY_LENGTH,
-			positionX: 100,
-			positionY: 50,
-		}),
-		new PhysicsObject({
 			acceleration: 0.2,
 			heading: 90,
 			label: "Circle",
 			maxHistoryLength: MAX_HISTORY_LENGTH,
-			positionX: -100,
-			positionY: 200,
+			positionX: 0,
+			positionY: 102,
 		}),
 		new PhysicsObject({
 			maxHistoryLength: MAX_HISTORY_LENGTH,
 			label: "Stationary",
-			positionX: 0,
-			positionY: -200,
+			positionX: 100,
+			positionY: -150,
 		})
 	]
 
 	const otherActorsIntervalBehaviors = [
 		(actor:PhysicsObject, intervalCount:number) => {
 			const distance = Math.hypot(actor.positionX - player.positionX, actor.positionY - player.positionY)
-			actor.acceleration = distance > 100 ? 0.1 : 0
+			actor.acceleration = distance > 50 ? 0.1 : 0
 
-			actor.setHeading(-Math.atan2(actor.positionX - player.positionX, actor.positionY - player.positionY)*180/Math.PI)
-		},
-		(actor:PhysicsObject, intervalCount:number) => {
-			if(
-				(intervalCount+25)%100 === 99
-				|| !(actor.heading===180 || actor.heading === 0)
-			) {
-				actor.incrementHeading(4)
-			}
+			actor.setHeading(-Math.atan2(actor.positionX - player.positionX, actor.positionY - player.positionY)*DEG_PER_RAD)
 		},
 		(actor:PhysicsObject, intervalCount:number) => {
 			actor.incrementHeading(-1)

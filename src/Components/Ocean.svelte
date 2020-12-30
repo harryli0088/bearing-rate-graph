@@ -4,6 +4,7 @@
   import PhysicsObject from '../Classes/PhysicsObject.ts'
   import drawLine from '../utils/canvas/drawLine.ts'
   import getActorSize from '../utils/getActorSize.ts'
+  import { DEG_PER_RAD } from '../utils/consts.ts'
 
   export let colors: string[]
   export let otherActors:PhysicsObject[]
@@ -45,7 +46,7 @@
       if(maintainPlayerPerspective) {
         //rotate the canvas to keep the player pointing up
         ctx.translate(player.positionX, player.positionY)
-        ctx.rotate(-player.heading * Math.PI / 180)
+        ctx.rotate(-player.heading / DEG_PER_RAD)
         ctx.translate(-player.positionX, -player.positionY)
       }
 
@@ -91,7 +92,7 @@
 
       //player
       ctx.translate(player.positionX, player.positionY)
-      ctx.rotate(player.heading * Math.PI / 180)
+      ctx.rotate(player.heading / DEG_PER_RAD)
       ctx.translate(-player.positionX, -player.positionY)
       ctx.fillStyle = "black"
       ctx.strokeStyle = "black"
