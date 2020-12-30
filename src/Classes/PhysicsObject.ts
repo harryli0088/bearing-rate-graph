@@ -5,6 +5,7 @@ export default class PhysicsObject {
   bearingHistories: number[] = []
   distanceFromPlayer: number = 100
   heading: number
+  label: string
   maxHistoryLength: number
   positionX: number
   positionY: number
@@ -16,6 +17,7 @@ export default class PhysicsObject {
     angularAcceleration?: number
     angularVelocity?: number
     heading?: number,
+    label?: string
     maxHistoryLength?: number,
     positionX?: number,
     positionY?: number,
@@ -26,6 +28,7 @@ export default class PhysicsObject {
     this.angularAcceleration = options.angularAcceleration ?? 0
     this.angularVelocity = options.angularVelocity ?? 0
     this.heading = options.heading ?? 0
+    this.label = options.label || ""
     this.maxHistoryLength = options.maxHistoryLength ?? 50
     this.positionX = options.positionX ?? 0
     this.positionY = options.positionY ?? 0
@@ -37,7 +40,7 @@ export default class PhysicsObject {
     //update the angular/heading data
     this.angularVelocity += this.angularAcceleration
     this.angularVelocity *= 0.9 //simple model for drag
-    this.heading += this.angularVelocity
+    this.incrementHeading(this.angularVelocity)
 
     //update the coordinate data
     const rad = (this.heading - 90) * Math.PI / 180
@@ -62,5 +65,12 @@ export default class PhysicsObject {
     if(this.bearingHistories.length > this.maxHistoryLength) {
       this.bearingHistories.pop()
     }
+  }
+
+  setHeading = (heading:number) => {
+    this.heading = heading % 360
+  }
+  incrementHeading = (increment:number) => {
+    this.setHeading(this.heading + increment)
   }
 }

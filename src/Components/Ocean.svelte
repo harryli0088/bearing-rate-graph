@@ -14,6 +14,13 @@
   $: height = 500 - controlBarHeight
   $: diagonal = Math.hypot(width, height) //we need this to make sure we draw a background big enough to cover the screen, even when the background is rotated
 
+  //DPR is important for improving the picture quality of the canvas, especially for text
+  //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
+  const DPR = window.devicePixelRatio
+  const legendWidth = 150
+  const legendHeight = 100
+  $: legendOffsetX = width - legendWidth
+  $: legendOffsetY = height - legendHeight
   let canvas
   let maintainPlayerPerspective = false
   let overlayPolarGrid = false
@@ -27,7 +34,10 @@
   	const requestId = requestAnimationFrame(draw)
 
   	function draw() {
-      ctx.save()
+      ctx.save() //initial save for DPR scaling
+      ctx.scale(DPR, DPR)
+
+      ctx.save() //second save for canvas centering and possible rotating
 
       //center the canvas on the player
       ctx.translate(width/2 - player.positionX, height/2 - player.positionY)
@@ -72,7 +82,7 @@
 
       //actors
       otherActors.forEach((actor, i) => {
-        ctx.fillStyle = colors[i]
+        ctx.strokeStyle = colors[i]
         ctx.beginPath()
         ctx.arc(actor.positionX, actor.positionY, getActorSize(actor.distanceFromPlayer), 0, 2 * Math.PI)
         ctx.stroke()
@@ -91,7 +101,37 @@
       ctx.lineTo(player.positionX - 5, player.positionY + 6)
       ctx.fill()
 
-      ctx.restore()
+      ctx.restore() //undo centering and possible rotation transforms
+
+
+      //legend
+      ctx.save()
+
+      ctx.translate(legendOffsetX, legendOffsetY)
+      ctx.fillStyle = "rgba(255,255,255,0.8)"
+      ctx.fillRect(0, 0, legendWidth, legendHeight)
+
+      ctx.fillStyle = "black"
+      ctx.fillText("Movement Type:", 5, 20)
+
+      otherActors.forEach((actor, i) => {
+        const yPosition = i * 15 + 35
+        ctx.lineWidth = 1.5
+        ctx.strokeStyle = colors[i]
+        ctx.beginPath()
+        ctx.arc(10, yPosition, 5, 0, 2 * Math.PI)
+        ctx.stroke()
+
+        drawLine(ctx, 10, yPosition, 25, yPosition)
+
+        ctx.fillStyle = colors[i]
+        ctx.fillText(actor.label, 30, yPosition + 3)
+      })
+
+      ctx.restore() //undo legend transforms
+
+
+      ctx.restore() //undo DPR transform
   	}
   })
 </script>
@@ -108,8 +148,9 @@
     </div>
     <canvas
       bind:this={canvas}
-      {width}
-      {height}
+      height={height * DPR}
+      style={`width:${width}px;height:${height}px;`}
+      width={width * DPR}
     />
   </div>
 </main>

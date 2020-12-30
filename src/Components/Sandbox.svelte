@@ -16,11 +16,57 @@
 	})
 	let otherActors: PhysicsObject[] = [
 		new PhysicsObject({
-			acceleration: 0.5,
+			acceleration: 0.25,
+			label: "Vertical Loops",
 			maxHistoryLength: MAX_HISTORY_LENGTH,
 			positionX: 100,
-			positionY: 100,
+			positionY: 50,
+		}),
+		new PhysicsObject({
+			acceleration: 0.2,
+			heading: 90,
+			label: "Circle",
+			maxHistoryLength: MAX_HISTORY_LENGTH,
+			positionX: -100,
+			positionY: 200,
+		}),
+		new PhysicsObject({
+			acceleration: 0.15,
+			heading: 270,
+			label: "Horizontal Loops",
+			maxHistoryLength: MAX_HISTORY_LENGTH,
+			positionX: -50,
+			positionY: -75,
+		}),
+		new PhysicsObject({
+			maxHistoryLength: MAX_HISTORY_LENGTH,
+			label: "Stationary",
+			positionX: 0,
+			positionY: -200,
 		})
+	]
+
+	const otherActorsIntervalBehaviors = [
+		(actor:PhysicsObject, intervalCount:number) => {
+			if(
+				(intervalCount+25)%100 === 99
+				|| !(actor.heading===180 || actor.heading === 0)
+			) {
+				actor.incrementHeading(4)
+			}
+		},
+		(actor:PhysicsObject, intervalCount:number) => {
+			actor.incrementHeading(-1)
+		},
+		(actor:PhysicsObject, intervalCount:number) => {
+			if(
+				(intervalCount + 100)%150 === 149
+				|| !(actor.heading===270 || actor.heading === 90)
+			) {
+				actor.incrementHeading(3)
+			}
+		},
+		() => {},
 	]
 
 	function onKeyDown(e) {
@@ -28,12 +74,12 @@
 			case 38: //up arrow
 			case 97: //w
         e.preventDefault()
-				player.acceleration = 1
+				player.acceleration = 0.57
 				break
 			case 39: //right arrow
 			case 68: //d
         e.preventDefault()
-				player.angularAcceleration = 0.5
+				player.angularAcceleration = 0.4
 				break
 			case 40: //down arrow
 			case 83: //s
@@ -43,7 +89,7 @@
 			case 37: //left arrow
 			case 65: //a
         e.preventDefault()
-				player.angularAcceleration = -0.5
+				player.angularAcceleration = -0.4
 				break
 			default:
 		}
@@ -72,7 +118,7 @@
   let intervalCount = 0
 	function run() {
 		player.update()
-    otherActors.forEach(actor => {
+    otherActors.forEach((actor, actorIndex) => {
       actor.update(player)
       actor.addBearing(getBearing(
 				player.heading,
@@ -81,7 +127,10 @@
 				actor.positionX,
 				actor.positionY,
 			))
+
+			otherActorsIntervalBehaviors[actorIndex](actor, intervalCount)
     })
+
 		otherActors = otherActors
     intervalCount++
 	}

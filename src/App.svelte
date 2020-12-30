@@ -57,7 +57,7 @@
 		<p>Other variables about the target(s) that could potentially be encoded into BRGs include:</p>
 		<ul>
 			<li>Relative Depth</li>
-			<li>"Loadness"</li>
+			<li>"Loudness"</li>
 		</ul>
 	</section>
 
