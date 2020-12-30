@@ -119,13 +119,26 @@
     intervalCount++
 	}
 
+	let running = false
   let interval = -1
   const INTERVAL_TIME = 50
   function onFocus() {
-    interval = setInterval(run, INTERVAL_TIME)
+    if(running === false) { //if we are not running yet
+			interval = setInterval(run, INTERVAL_TIME)
+			running = true
+		}
   }
-  function onBlur() {
-    clearInterval(interval)
+  function onBlur(e) {
+		//if the user triggered an event inside the container
+		//ie the canvas control bar
+		if(e.currentTarget.contains(e.relatedTarget)) {
+			e.currentTarget.focus() //refocus on the container
+    }
+		else {
+			//else stop running
+			clearInterval(interval)
+			running = false
+		}
   }
 
 	onDestroy(() => {
@@ -136,6 +149,7 @@
 <main>
   <Row>
     <div
+			id="oceanContainer"
       on:blur={onBlur}
       on:focus={onFocus}
       on:keydown={onKeyDown}
@@ -147,6 +161,12 @@
         {otherActors}
         {player}
       />
+
+			{#if running === false}
+				<div id="oceanModal">
+					<div>Click on the ocean to start playing!</div>
+				</div>
+			{/if}
     </div>
 
 		<BearingRateGraph
@@ -160,5 +180,21 @@
 </main>
 
 <style>
+	#oceanContainer {
+		position: relative;
+		outline: none;
+	}
 
+	#oceanModal {
+		position: absolute;
+		background: rgba(0,0,0,0.5);
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 1em;
+	}
 </style>
