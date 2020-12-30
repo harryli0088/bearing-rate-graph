@@ -17,8 +17,8 @@
   //DPR is important for improving the picture quality of the canvas, especially for text
   //based off this fiddle http://jsfiddle.net/65maD/83/ from this stack answer https://stackoverflow.com/a/54027313
   const DPR = window.devicePixelRatio
-  const legendWidth = 150
-  const legendHeight = 100
+  const legendWidth = 105
+  const legendHeight = 80
   $: legendOffsetX = width - legendWidth
   $: legendOffsetY = height - legendHeight
   let canvas
@@ -106,24 +106,24 @@
       ctx.save()
 
       ctx.translate(legendOffsetX, legendOffsetY)
-      ctx.fillStyle = "rgba(255,255,255,0.8)"
+      ctx.fillStyle = "rgba(255,255,255,0.7)"
       ctx.fillRect(0, 0, legendWidth, legendHeight)
 
       ctx.fillStyle = "black"
-      ctx.fillText("Movement Type:", 5, 20)
+      ctx.fillText("Movement Type", 10, 20)
 
       otherActors.forEach((actor, i) => {
         const yPosition = i * 15 + 35
         ctx.lineWidth = 1.5
         ctx.strokeStyle = colors[i]
         ctx.beginPath()
-        ctx.arc(10, yPosition, 5, 0, 2 * Math.PI)
+        ctx.arc(15, yPosition, 5, 0, 2 * Math.PI)
         ctx.stroke()
 
-        drawLine(ctx, 10, yPosition, 25, yPosition)
+        drawLine(ctx, 15, yPosition, 30, yPosition)
 
         ctx.fillStyle = colors[i]
-        ctx.fillText(actor.label, 30, yPosition + 3)
+        ctx.fillText(actor.label, 35, yPosition + 3)
       })
 
       ctx.restore() //undo legend transforms

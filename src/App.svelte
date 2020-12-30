@@ -17,7 +17,7 @@
 	<section></section>
 
 	<section>
-		<p>Submarines can use <a href="https://en.wikipedia.org/wiki/Sonar" target="_blank" rel="noopener noreferrer">sonar</a> to locate the relative angular position of nearby vessels. A target's <b>bearing</b> is simply the relative angular position of the target. We can represent the front of the submarine as being 0°, then move 360° clockwise around the ship to complete a full circle. So 90° is right, 180° is behind, and 270° is left.</p>
+		<p>Submarines can use <a href="https://en.wikipedia.org/wiki/Sonar" target="_blank" rel="noopener noreferrer">sonar</a> to locate the relative angular positions of nearby vessels, called <b>bearings</b>. We can represent the front of the submarine as being 0°, then move 360° clockwise around the ship to complete a full circle. So 90° is right, 180° is behind, and 270° is left.</p>
 
 		<SimplePolorExample/>
 	</section>
@@ -36,7 +36,11 @@
 
 	<section>
 		<h2>Sandbox</h2>
+		<p>In this sandbox, there are a few targets: one following you, one moving in a circle, and one stationary. You can move around with arrow keys or WASD. See if you can intepret the bearing rate graph based on your movements!</p>
+
 		<Sandbox/>
+
+		<p>Notice that when you stay still, the red and green lines in the bearing rate chart straighten out. This is because the bearings of those targets are relatively constant. If you were operating a real submarine, a straight line on your bearing rate chart could indicate something stationary or someone following you!</p>
 	</section>
 
 	<section id="video">
@@ -47,8 +51,6 @@
 				<iframe title="video" width="560" height="315" src="https://www.youtube.com/embed/AqqaYs7LjlM?start=477" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 			</div>
 		</div>
-
-		<br/><br/>
 	</section>
 
 	<section>
@@ -57,7 +59,8 @@
 		<p>Other variables about the target(s) that could potentially be encoded into BRGs include:</p>
 		<ul>
 			<li>Relative Depth</li>
-			<li>"Loudness"</li>
+			<li>Classification based on the sound or loudness</li>
+			<li>Change in distance (ie moving away vs coming towards)</li>
 		</ul>
 	</section>
 
@@ -76,7 +79,7 @@
 	}
 
 	header {
-		height: 80vh;
+		height: 50vh;
 		display: flex;
 		text-align: center;
 		justify-content: center;

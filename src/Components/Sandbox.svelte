@@ -55,7 +55,7 @@
 	function onKeyDown(e) {
 		switch(e.keyCode) {
 			case 38: //up arrow
-			case 97: //w
+			case 87: //w
         e.preventDefault()
 				player.acceleration = 0.57
 				break
@@ -81,7 +81,7 @@
 	function onKeyUp(e) {
 		switch(e.keyCode) {
 			case 38: //up arrow
-			case 97: //w
+			case 87: //w
 				player.acceleration = 0
 				break
 			case 39: //right arrow
