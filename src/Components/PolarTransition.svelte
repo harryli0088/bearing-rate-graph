@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
+  import { beforeUpdate, afterUpdate } from 'svelte'
   import { tweened } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
+  import { scaleLinear } from "d3-scale"
 
   export let fullWidth:number = 500
   $: centeredWidth = Math.min(500, fullWidth)
@@ -14,16 +16,13 @@
   $: halfHeight = height/2
 
 
-  const value = tweened(0, {
+  const animation = tweened(0, {
     duration: 2000,
     easing: cubicOut
   })
 
-  let showPolar:boolean = true
   const interval = setInterval(() => {
-    showPolar = !showPolar
-
-    value.set(showPolar ? 0 : 1)
+    animation.set($animation===1 ? 0 : 1)
   }, 2000)
   onDestroy(() => clearInterval(interval))
 
@@ -31,58 +30,53 @@
   let svg
 
   type LineDataType = {x1: number, y1: number, x2: number, y2: number}
-  type TransitionType = {start: LineDataType, end: LineDataType}
-  $: lineDataStructure = [
-    { //0
-      start: {x1: 0, y1: -halfHeight, x2: 0, y2: 0},
-      end: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //90
-      start: {x1: 0, y1: 0, x2: halfWidth, y2: 0},
-      end: {x1: halfWidth/2, y1: halfHeight, x2: halfWidth/2, y2: -halfHeight},
-    },
-    { //180 #1
-      start: {x1: 0, y1: 0, x2: 0, y2: halfHeight},
-      end: {x1: halfWidth, y1: halfHeight, x2: halfWidth, y2: -halfHeight},
-    },
-    { //180 #2
-      start: {x1: 0, y1: 0, x2: 0, y2: halfHeight},
-      end: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //270
-      start: {x1: -halfWidth, y1: 0, x2: 0, y2: 0},
-      end: {x1: -halfWidth/2, y1: -halfHeight, x2: -halfWidth/2, y2: halfHeight},
-    },
-    { //
-      start: {x1: -halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
-      end: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //
-      start: {x1: 0, y1: 0, x2: halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
-      end: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //
-      start: {x1: halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
-      end: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //
-      start: {x1: 0, y1: 0, x2: -halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
-      end: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
+  const ticks:{angle:number,label:string}[] = [
+    {angle:180.1, label: "180"},
+    {angle:225, label: ""},
+    {angle:270, label: "270"},
+    {angle:315, label: ""},
+    {angle:0, label: "0"},
+    {angle:45, label: ""},
+    {angle:90, label: "90"},
+    {angle:135, label: ""},
+    {angle:179.9, label: "180"},
   ]
 
-  $: lineData = lineDataStructure.map(l => {
-    const data = {}
-    for(const attr in l.end) {
-      data[attr] = l.start[attr] + $value*(l.end[attr] - l.start[attr])
+  $: x2Scale = scaleLinear().domain(
+    [0, 180, 180, 360]
+  ).range(
+    [0, $animation*halfWidth, -$animation*halfWidth, 0]
+  )
+  $: y2 = $animation * halfHeight
+  $: thetaScale = scaleLinear().domain(
+    [0, 180, 180, 360]
+  ).range(
+    [0, (1 - $animation)*180, ($animation - 1)*180, 0]
+  )
+
+  const degToRadFactor = Math.PI/180
+  $: y1Offset = - halfWidth * $animation
+  $: lineData = ticks.map(t => {
+    const x2 = x2Scale(t.angle)
+    const theta = thetaScale(t.angle) * degToRadFactor
+
+    if($animation === 1) {
+      console.log(
+        t.angle,
+        thetaScale(t.angle),
+        Math.cos(theta)
+      )
     }
 
-    return data
+    return {
+      x1: x2 + halfWidth * Math.sin(theta),
+      y1: y2 + y1Offset - halfWidth * Math.cos(theta),
+      x2, y2,
+    }
   })
 
 
-
-  $: proxyValue = $value * 2
+  $: proxyValue = $animation * 2
 </script>
 
 <main>
@@ -100,6 +94,8 @@
             <line {...line}/>
           {/each}
 
+          <line x1={x2Scale(180)} y1={y2} x2={x2Scale(179.9)} {y2}/>
+
           <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
           <text x={halfWidth} y={0} dy={-5}>90°</text>
           <text x={0} y={halfHeight} dy={15}>180°</text>
@@ -107,7 +103,7 @@
         </g>
       </g>
     </svg>
-    <div>{Math.round(100*$value)}, {Math.round(100*proxyValue)}</div>
+    <div>{Math.round(100*$animation)}, {Math.round(100*proxyValue)}</div>
   </div>
 </main>
 
