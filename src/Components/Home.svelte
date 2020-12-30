@@ -13,10 +13,15 @@
 		</div>
 	</header>
 
-	<section></section>
+	<section id="imgContainer">
+    <br/>
+    <br/>
+    <img src="img/submarine.png" alt="submarine"/>
+    <div>Mobile Krusty Krab (<a href="https://spongebob.fandom.com/wiki/Mobile_Krusty_Krab">SpongeBobia</a>)</div>
+  </section>
 
 	<section>
-		<p>Submarines can use <a href="https://en.wikipedia.org/wiki/Sonar" target="_blank" rel="noopener noreferrer">sonar</a> to locate the relative angular positions of nearby vessels, called <b>bearings</b>. We can represent the front of the submarine as being 0°, then move 360° clockwise around the ship to complete a full circle. So 90° is right, 180° is behind, and 270° is left.</p>
+		<p>Submarines can use <a href="https://en.wikipedia.org/wiki/Sonar" target="_blank" rel="noopener noreferrer">sonar</a> to locate the relative angular positions, called <b>bearings</b>, of nearby vessels. We can represent the front of the submarine as being 0°, then move 360° clockwise around the ship to complete a full circle. So 90° is right, 180° is behind, and 270° is left.</p>
 
 		<SimplePolorExample/>
 	</section>
@@ -34,12 +39,12 @@
 	</section>
 
 	<section>
-		<h2>Sandbox</h2>
-		<p>In this sandbox, there are a few targets: one following you, one moving in a circle, and one stationary. You can move around with arrow keys or WASD. See if you can intepret the bearing rate graph based on your movements!</p>
+		<h2>Free Play</h2>
+		<p>In this ocean, there are a few targets: one following you, one moving in a circle, and one stationary. You can move around with arrow keys or WASD. See if you can intepret the bearing rate graph!</p>
 
 		<Sandbox/>
 
-		<p>Notice that when you stay still, the red and green lines in the bearing rate chart straighten out. This is because the bearings of those targets are relatively constant. If you were operating a real submarine, a straight line on your bearing rate chart could indicate something stationary or someone following you!</p>
+		<p>Notice that when you stay still, the red and green lines in the bearing rate chart straighten out because the bearings of those targets are relatively constant. If you were operating a real submarine, a straight line on your bearing rate chart could indicate something stationary or someone following you!</p>
 	</section>
 
 	<section id="video">
@@ -53,12 +58,12 @@
 	</section>
 
 	<section>
-		<h2>Encoding more variables</h2>
+		<h2>Encoding More Data</h2>
 		<p>It's difficult to determine, based on SED's unclassified video, the exact implementation of the bearing rate graphs used on the submarines. I built my BRGs based off his examples, and also encoded the distance of the target to scale inversely with the circle size and opacity.</p>
-		<p>Other variables about the target(s) that could potentially be encoded into BRGs include:</p>
+		<p>Other data about the target(s) that could potentially be encoded into BRGs include:</p>
 		<ul>
+      <li>Classification (ie ship, sub, etc) based on the sound or loudness</li>
 			<li>Relative Depth</li>
-			<li>Classification based on the sound or loudness</li>
 			<li>Change in distance (ie moving away vs coming towards)</li>
 		</ul>
 	</section>
@@ -83,7 +88,7 @@
 		text-align: center;
 		justify-content: center;
 		align-items: center;
-		background-color: black;
+		background-color: #222;
 		padding: 1em;
 	}
 
@@ -91,9 +96,37 @@
 		font-style: italic;
 	}
 
-	section {
-		padding: 1em;
+	section, footer {
+    padding: 1em;
 	}
+  @media only screen and (min-width: 700px) {
+    section, footer {
+      padding-left: calc(50vw - 300px);
+  		padding-right: calc(50vw - 300px);
+    }
+  }
+  @media only screen and (min-width: 1000px) {
+    section, footer {
+      padding-left: calc(50vw - 400px);
+  		padding-right: calc(50vw - 400px);
+    }
+  }
+  @media only screen and (min-width: 1200px) {
+    section, footer {
+      padding-left: calc(50vw - 500px);
+  		padding-right: calc(50vw - 500px);
+    }
+  }
+
+  #imgContainer, #imgContainer a {
+    text-align: center;
+    color: #bbb;
+    font-size: 10px;
+  }
+  img {
+    width: 100%;
+    max-width: 500px;
+  }
 
 	#video {
     text-align: center;
@@ -121,6 +154,5 @@
 	footer {
 		background-color: #222;
 		border-top: 1px solid black;
-		padding: 1em;
 	}
 </style>

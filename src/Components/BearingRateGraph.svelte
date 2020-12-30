@@ -112,7 +112,7 @@
 				<line class="axis" x1={margin.left - 15} y1={yScale(0)} x2={margin.left} y2={yScale(0)}/>
 				<line class="axis" x1={margin.left} y1={yScale(0)} x2={margin.left} y2={yBottom}/>
 				<line class="axis" x1={margin.left - 15} y1={yBottom} x2={margin.left} y2={yBottom}/>
-				<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{(timeSpanSeconds).toFixed(1)} sec</text>
+				<text x={margin.left - 20} y={yBottom} dy={-5} text-anchor="end">{Math.round(timeSpanSeconds)} sec</text>
 				<text x={margin.left - 20} y={yBottom} dy={10} text-anchor="end">ago</text>
 			</g>
 
@@ -156,7 +156,7 @@
 
 <style>
 	main {
-		background-color: #002D62;
+		/* background-color: #002D62; */
 	}
 
 	svg {}

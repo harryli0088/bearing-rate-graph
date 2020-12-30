@@ -33,7 +33,7 @@
   	<div class="showBearing">
       <div>
         <div class="label">Bearing of Target: </div>
-        <br/>
+        <br/><br/>
         <div class="bearingValue"><b>{parseInt(currentBearing)}°</b></div>
       </div>
     </div>
