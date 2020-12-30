@@ -1,4 +1,8 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte'
+  import { tweened } from 'svelte/motion'
+  import { cubicOut } from 'svelte/easing'
+
   export let fullWidth:number = 500
   $: centeredWidth = Math.min(500, fullWidth)
   $: fullHeight = centeredWidth
@@ -9,44 +13,76 @@
   $: halfWidth = width/2
   $: halfHeight = height/2
 
+
+  const value = tweened(0, {
+    duration: 2000,
+    easing: cubicOut
+  })
+
+  let showPolar:boolean = true
+  const interval = setInterval(() => {
+    showPolar = !showPolar
+
+    value.set(showPolar ? 0 : 1)
+  }, 2000)
+  onDestroy(() => clearInterval(interval))
+
+
   let svg
 
   type LineDataType = {x1: number, y1: number, x2: number, y2: number}
-  type TransitionType = {polar: LineDataType, rect: LineDataType}
-  $: lineData = [
+  type TransitionType = {start: LineDataType, end: LineDataType}
+  $: lineDataStructure = [
     { //0
-      polar: {x1: 0, y1: -halfHeight, x2: 0, y2: 0},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //45
-      polar: {x1: 0, y1: 0, x2: 0, y2: halfHeight},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+      start: {x1: 0, y1: -halfHeight, x2: 0, y2: 0},
+      end: {x1: 0, y1: 0, x2: 0, y2: 0},
     },
     { //90
-      polar: {x1: -halfWidth, y1: 0, x2: 0, y2: 0},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+      start: {x1: 0, y1: 0, x2: halfWidth, y2: 0},
+      end: {x1: halfWidth/2, y1: halfHeight, x2: halfWidth/2, y2: -halfHeight},
     },
-    { //135
-      polar: {x1: 0, y1: 0, x2: halfWidth, y2: 0},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    { //180 #1
+      start: {x1: 0, y1: 0, x2: 0, y2: halfHeight},
+      end: {x1: halfWidth, y1: halfHeight, x2: halfWidth, y2: -halfHeight},
     },
-    { //180
-      polar: {x1: -halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
-    },
-    { //225
-      polar: {x1: 0, y1: 0, x2: halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    { //180 #2
+      start: {x1: 0, y1: 0, x2: 0, y2: halfHeight},
+      end: {x1: 0, y1: 0, x2: 0, y2: 0},
     },
     { //270
-      polar: {x1: halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+      start: {x1: -halfWidth, y1: 0, x2: 0, y2: 0},
+      end: {x1: -halfWidth/2, y1: -halfHeight, x2: -halfWidth/2, y2: halfHeight},
     },
-    { //315
-      polar: {x1: 0, y1: 0, x2: -halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
-      rect: {x1: 0, y1: 0, x2: 0, y2: 0},
+    { //
+      start: {x1: -halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
+      end: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //
+      start: {x1: 0, y1: 0, x2: halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
+      end: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //
+      start: {x1: halfWidth*DIAG_CONSTANT, y1: -halfHeight*DIAG_CONSTANT, x2: 0, y2: 0},
+      end: {x1: 0, y1: 0, x2: 0, y2: 0},
+    },
+    { //
+      start: {x1: 0, y1: 0, x2: -halfWidth*DIAG_CONSTANT, y2: halfHeight*DIAG_CONSTANT},
+      end: {x1: 0, y1: 0, x2: 0, y2: 0},
     },
   ]
+
+  $: lineData = lineDataStructure.map(l => {
+    const data = {}
+    for(const attr in l.end) {
+      data[attr] = l.start[attr] + $value*(l.end[attr] - l.start[attr])
+    }
+
+    return data
+  })
+
+
+
+  $: proxyValue = $value * 2
 </script>
 
 <main>
@@ -61,7 +97,7 @@
           <circle cx={0} cy={0} r={halfWidth*3/4}/>
 
           {#each lineData as line}
-            <line {...line.polar}/>
+            <line {...line}/>
           {/each}
 
           <text x={0} y={-halfHeight} dy={-5}>0° (360°)</text>
@@ -71,6 +107,7 @@
         </g>
       </g>
     </svg>
+    <div>{Math.round(100*$value)}, {Math.round(100*proxyValue)}</div>
   </div>
 </main>
 
