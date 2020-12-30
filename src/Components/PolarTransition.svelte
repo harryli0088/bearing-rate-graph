@@ -15,6 +15,8 @@
   $: halfWidth = width/2
   $: halfHeight = height/2
 
+  let svg
+
 
   const animation = tweened(0, {
     duration: 2000,
@@ -25,22 +27,6 @@
     animation.set($animation===1 ? 0 : 1)
   }, 2000)
   onDestroy(() => clearInterval(interval))
-
-
-  let svg
-
-  type LineDataType = {x1: number, y1: number, x2: number, y2: number}
-  const ticks:{angle:number,label:string}[] = [
-    {angle:180.1, label: "180"},
-    {angle:225, label: ""},
-    {angle:270, label: "270"},
-    {angle:315, label: ""},
-    {angle:0, label: "0"},
-    {angle:45, label: ""},
-    {angle:90, label: "90"},
-    {angle:135, label: ""},
-    {angle:179.9, label: "180"},
-  ]
 
   $: x2Scale = scaleLinear().domain(
     [0, 180, 180, 360]
@@ -54,28 +40,54 @@
     [0, (1 - $animation)*180, ($animation - 1)*180, 0]
   )
 
-  const degToRadFactor = Math.PI/180
-  $: lineData = ticks.map(t => {
-    const x2 = x2Scale(t.angle)
-    const theta = thetaScale(t.angle) * degToRadFactor
-
-    if($animation === 1) {
-      console.log(
-        t.angle,
-        thetaScale(t.angle),
-        Math.cos(theta)
-      )
-    }
+  $: getLineDataFromAngle = (angle, radius=halfWidth) => {
+    const x2 = x2Scale(angle)
+    const theta = thetaScale(angle) * degToRadFactor
 
     return {
-      x1: x2 + halfWidth * Math.sin(theta),
-      y1: - halfWidth * Math.cos(theta),
+      x1: x2 + radius * Math.sin(theta),
+      y1: - radius * Math.cos(theta),
       x2, y2,
     }
-  })
+  }
+
+
+  const degToRadFactor = Math.PI/180
+
+  const circleDegrees:number[] = []
+  for(let i=180; i<360; ++i) {
+    circleDegrees.push(i)
+  }
+  for(let i=0; i<180; ++i) {
+    circleDegrees.push(i)
+  }
+  $: circlePathRadius = halfWidth * (3 + $animation) / 4
+  $: circlePath = circleDegrees.reduce(
+    (d, degree) => {
+      const { x1, y1 } = getLineDataFromAngle(degree, circlePathRadius)
+      d += ` ${x1},${y1}`
+      return d
+    },
+    "M"
+  )
+
+  const ticks:{angle:number,label:string}[] = [
+    {angle:180.1, label: "180"},
+    {angle:225, label: ""},
+    {angle:270, label: "270"},
+    {angle:315, label: ""},
+    {angle:0, label: "0"},
+    {angle:45, label: ""},
+    {angle:90, label: "90"},
+    {angle:135, label: ""},
+    {angle:179.9, label: "180"},
+  ]
+
+  $: lineData = ticks.map(t => getLineDataFromAngle(t.angle))
 
 
   $: proxyValue = $animation * 2
+
 </script>
 
 <main>
@@ -87,7 +99,7 @@
     >
       <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
         <g class="grid">
-          <circle cx={0} cy={0} r={halfWidth*3/4}/>
+          <path d={circlePath}/>
 
           {#each lineData as line}
             <line {...line}/>
@@ -107,7 +119,7 @@
 </main>
 
 <style>
-  .grid line, .grid circle {
+  .grid line, .grid path {
     fill: none;
     stroke: gray;
     stroke-width: 1px;
