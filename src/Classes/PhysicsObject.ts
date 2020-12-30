@@ -62,6 +62,7 @@ export default class PhysicsObject {
   }
 
   getSize = () => 1000 / (this.distanceFromPlayer + 10)
+  getOpacity = () => 400 / (this.distanceFromPlayer + 400)
 
   addBearing = (bearing: number) => {
     this.bearingHistories.unshift(bearing)

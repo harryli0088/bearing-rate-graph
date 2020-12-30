@@ -72,21 +72,19 @@
         drawLine(ctx, leftX, gridPosition, rightX, gridPosition)
       }
 
-
-      //actor lines
+      //actors
       ctx.lineWidth = 2
       otherActors.forEach((actor, i) => {
+        ctx.globalAlpha = actor.getOpacity()
         ctx.strokeStyle = colors[i]
-        drawLine(ctx, player.positionX, player.positionY, actor.positionX, actor.positionY)
-      })
 
-      //actors
-      otherActors.forEach((actor, i) => {
-        ctx.strokeStyle = colors[i]
+        drawLine(ctx, player.positionX, player.positionY, actor.positionX, actor.positionY)
+
         ctx.beginPath()
         ctx.arc(actor.positionX, actor.positionY, actor.getSize(), 0, 2 * Math.PI)
         ctx.stroke()
       })
+      ctx.globalAlpha = 1
 
 
       //player

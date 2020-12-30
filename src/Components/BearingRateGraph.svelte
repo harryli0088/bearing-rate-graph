@@ -132,6 +132,7 @@
 					{#if true}
 						<path
 							d={pathData[i]}
+							opacity={actor.getOpacity()}
 							stroke={colors[i]}
 						/>
 					{/if}
@@ -143,6 +144,7 @@
 	        <circle
 						cx={xScale(actor.bearingHistories[0])}
 						cy={yScale(0)}
+						opacity={actor.getOpacity()}
 						r={actor.getSize()}
 						stroke={colors[i]}
 					/>

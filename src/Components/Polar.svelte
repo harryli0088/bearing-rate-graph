@@ -64,8 +64,25 @@
         </g>
 
         <g>
-          <line x1={0} y1={0} x2={actor.positionX} y2={actor.positionY} stroke="red" stroke-width="2px"/>
-          <circle cx={actor.positionX} cy={actor.positionY} r={actor.getSize()} fill="none" stroke="red" stroke-width="2px"/>
+          <line
+            opacity={actor.getOpacity()}
+            stroke="red"
+            stroke-width="2px"
+            x1={0}
+            y1={0}
+            x2={actor.positionX}
+            y2={actor.positionY}
+          />
+
+          <circle
+            cx={actor.positionX}
+            cy={actor.positionY}
+            fill="none"
+            opacity={actor.getOpacity()}
+            r={actor.getSize()}
+            stroke="red"
+            stroke-width="2px"
+          />
         </g>
       </g>
     </svg>
