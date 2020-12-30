@@ -4,7 +4,7 @@
 
 	const routes = {
     '/': Home,
-    '/test': Polar,
+		'*': Home,
 	}
 </script>
 
