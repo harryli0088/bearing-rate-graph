@@ -55,7 +55,6 @@
   )
 
   const degToRadFactor = Math.PI/180
-  $: y1Offset = - halfWidth * $animation
   $: lineData = ticks.map(t => {
     const x2 = x2Scale(t.angle)
     const theta = thetaScale(t.angle) * degToRadFactor
@@ -70,7 +69,7 @@
 
     return {
       x1: x2 + halfWidth * Math.sin(theta),
-      y1: y2 + y1Offset - halfWidth * Math.cos(theta),
+      y1: - halfWidth * Math.cos(theta),
       x2, y2,
     }
   })
