@@ -74,6 +74,9 @@ export default class PhysicsObject {
   setHeading = (heading:number) => {
     this.heading = heading % 360
   }
+  setHeadingFromDxDy = (dx: number, dy: number) => {
+    this.setHeading(-Math.atan2(dx, dy)*DEG_PER_RAD)
+  }
   incrementHeading = (increment:number) => {
     this.setHeading(this.heading + increment)
   }

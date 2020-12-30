@@ -132,6 +132,40 @@
       ctx.restore() //undo DPR transform
   	}
   })
+
+  let move = false
+  function onMouseDown(e) {
+    move = true
+    updatePlayer(e.clientX, e.clientY)
+  }
+  function onMouseMove(e) {
+    if(move) {
+      updatePlayer(e.clientX, e.clientY)
+    }
+  }
+  function onTouchStart(e) {
+    move = true
+    updatePlayer(e.touches[0].clientX, e.touches[0].clientY)
+  }
+  function onTouchMove(e) {
+    if(move) {
+      updatePlayer(e.touches[0].clientX, e.touches[0].clientY)
+    }
+  }
+  function updatePlayer(clientX:number, clientY:number) {
+    const dimensions = canvas.getBoundingClientRect()
+
+    const canvasX = clientX - dimensions.left
+    const canvasY = clientY - dimensions.top
+
+    player.setHeadingFromDxDy(width/2 - canvasX, height/2 - canvasY)
+    player.acceleration = 0.6
+  }
+
+  function onMouseUpTouchEnd(e) {
+    move = false
+    player.acceleration = 0
+  }
 </script>
 
 <main>
@@ -147,6 +181,14 @@
     <canvas
       bind:this={canvas}
       height={height * DPR}
+      oncontextmenu="return false;"
+      on:mousedown={onMouseDown}
+      on:mousemove={onMouseMove}
+      on:mouseup={onMouseUpTouchEnd}
+      on:mouseout={onMouseUpTouchEnd}
+      on:touchstart={onTouchStart}
+      on:touchmove={onTouchMove}
+      on:touchend={onMouseUpTouchEnd}
       style={`width:${width}px;height:${height}px;`}
       width={width * DPR}
     />

@@ -44,7 +44,7 @@
 			const distance = Math.hypot(actor.positionX - player.positionX, actor.positionY - player.positionY)
 			actor.acceleration = distance > 50 ? 0.1 : 0
 
-			actor.setHeading(-Math.atan2(actor.positionX - player.positionX, actor.positionY - player.positionY)*DEG_PER_RAD)
+			actor.setHeadingFromDxDy(actor.positionX - player.positionX, actor.positionY - player.positionY)
 		},
 		() => {},
 		(actor:PhysicsObject, intervalCount:number) => {
@@ -57,7 +57,7 @@
 			case 38: //up arrow
 			case 87: //w
         e.preventDefault()
-				player.acceleration = 0.57
+				player.acceleration = 0.6
 				break
 			case 39: //right arrow
 			case 68: //d
