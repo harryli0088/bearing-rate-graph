@@ -24,6 +24,12 @@
 			positionY: -75,
 		}),
 		new PhysicsObject({
+			maxHistoryLength: MAX_HISTORY_LENGTH,
+			label: "Stationary",
+			positionX: 100,
+			positionY: -150,
+		}),
+		new PhysicsObject({
 			acceleration: 0.2,
 			heading: 90,
 			label: "Circle",
@@ -31,12 +37,6 @@
 			positionX: 0,
 			positionY: 102,
 		}),
-		new PhysicsObject({
-			maxHistoryLength: MAX_HISTORY_LENGTH,
-			label: "Stationary",
-			positionX: 100,
-			positionY: -150,
-		})
 	]
 
 	const otherActorsIntervalBehaviors = [
@@ -46,10 +46,10 @@
 
 			actor.setHeading(-Math.atan2(actor.positionX - player.positionX, actor.positionY - player.positionY)*DEG_PER_RAD)
 		},
+		() => {},
 		(actor:PhysicsObject, intervalCount:number) => {
 			actor.incrementHeading(-1)
 		},
-		() => {},
 	]
 
 	function onKeyDown(e) {
