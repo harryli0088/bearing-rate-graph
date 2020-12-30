@@ -51,7 +51,4 @@
 </main>
 
 <style>
-  .polarContainer {
-    text-align: center;
-  }
 </style>

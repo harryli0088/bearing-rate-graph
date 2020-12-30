@@ -24,14 +24,13 @@
     e.preventDefault()
     updateActorPosition(e.touches[0].clientX, e.touches[0].clientY)
   }
-  export let updateActorPositionCallback:Function
+  export let updateActorPositionCallback:Function = () => {}
   function updateActorPosition(clientX:number, clientY:number) {
     const dimensions = svg.getBoundingClientRect()
     actor.positionX = clientX - dimensions.left - fullWidth/2
     actor.positionY = clientY - dimensions.top - fullHeight/2
-    if(updateActorPositionCallback) {
-      updateActorPositionCallback()
-    }
+
+    updateActorPositionCallback()
   }
 
 </script>

@@ -19,13 +19,13 @@
 
 
   const animation = tweened(0, {
-    duration: 2000,
+    duration: 4000,
     easing: cubicOut
   })
 
   const interval = setInterval(() => {
     animation.set($animation===1 ? 0 : 1)
-  }, 3000)
+  }, 5000)
   onDestroy(() => clearInterval(interval))
 
   $: x2Scale = scaleLinear().domain(
@@ -61,7 +61,9 @@
   for(let i=0; i<180; ++i) {
     circleDegrees.push(i)
   }
-  $: circlePathRadius = halfWidth * (12 + 3*$animation) / 16
+  circleDegrees.push(179.9)
+  $: topFactor = (12 + 3*$animation) / 16
+  $: circlePathRadius = halfWidth * topFactor
   $: circlePath = circleDegrees.reduce(
     (d, degree) => {
       const { x1, y1 } = getLineDataFromAngle(degree, circlePathRadius)
@@ -72,20 +74,23 @@
   )
 
   const ticks:{angle:number,label:string, dy:number}[] = [
-    {angle:180.1, label: "180", dy: 15},
-    {angle:225,   label: "",    dy: 0},
-    {angle:270,   label: "270", dy: -5},
-    {angle:315,   label: "",    dy: 0},
-    {angle:0,     label: "",    dy: 0},
-    {angle:45,    label: "",    dy: 0},
-    {angle:90,    label: "90",  dy: -5},
-    {angle:135,   label: "",    dy: 0},
+    {angle:180,     label: "180", dy: 15},
+    {angle:225,     label: "",    dy: 0},
+    {angle:270,     label: "270", dy: -5},
+    {angle:315,     label: "",    dy: 0},
+    {angle:0,       label: "",    dy: 0},
+    {angle:45,      label: "",    dy: 0},
+    {angle:90,      label: "90",  dy: -5},
+    {angle:135,     label: "",    dy: 0},
     {angle:179.999, label: "180", dy: 15},
   ]
 
   $: lineData = ticks.map(t => getLineDataFromAngle(t.angle))
 
-  const ticksWithLabels = ticks.filter(t => t.label.length > 0)
+  $: ticksWithLabels = ticks.filter(t =>
+    t.label.length > 0 //only allow ticks with a label
+    && !(Math.floor(t.angle)===179 && $animation===0) //hide the 179.999 label if the animation is at 0
+  )
   const tickEndDy = -5
   $: textData = ticksWithLabels.map(t => {
     const { x1, y1 } = getLineDataFromAngle(t.angle)
@@ -100,6 +105,7 @@
     }
   })
 
+  $: timeAxisTop = -halfHeight * topFactor
 </script>
 
 <main>
@@ -124,9 +130,17 @@
             <text {...text.attr}>{text.text}</text>
           {/each}
         </g>
+
+        <g class="timeAxis" transform={`translate(${-halfWidth - 10},0)`} opacity={Math.max(0, 10*($animation-0.9))}>
+          <text x={-20} y={timeAxisTop} dy={5} text-anchor="end">Now</text>
+          <line x1={-15} y1={timeAxisTop} x2={0} y2={timeAxisTop}/>
+          <line x1={0} y1={timeAxisTop} x2={0} y2={halfHeight}/>
+          <line x1={-15} y1={halfWidth} x2={0} y2={halfHeight}/>
+          <text x={-20} y={halfHeight} dy={-5} text-anchor="end">{(5).toFixed(1)} sec</text>
+          <text x={-20} y={halfHeight} dy={10} text-anchor="end">ago</text>
+        </g>
       </g>
     </svg>
-    <div>{Math.round(100*$animation)}</div>
   </div>
 </main>
 
@@ -138,5 +152,10 @@
   }
   .grid text {
     text-anchor: middle;
+  }
+
+  .timeAxis line {
+    stroke: gray;
+    stroke-width: 2px;
   }
 </style>
