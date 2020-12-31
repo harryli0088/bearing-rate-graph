@@ -45,10 +45,15 @@
       bind:this={svg}
       width={fullWidth}
       height={fullHeight}
-      on:mousemove={onMouseMove}
-      on:touchmove={onTouchMove}
     >
       <g transform={`translate(${fullWidth/2},${fullHeight/2})`}>
+        <circle
+          cx={0}
+          cy={0}
+          r={fullWidth/2}
+          fill="#1B2631"
+        />
+
         <g class="grid">
           <circle cx={0} cy={0} r={halfWidth*3/4}/>
 
@@ -84,6 +89,15 @@
             stroke-width="2px"
           />
         </g>
+
+        <circle
+          cx={0}
+          cy={0}
+          r={fullWidth/2}
+          on:mousemove={onMouseMove}
+          on:touchmove={onTouchMove}
+          fill="transparent"
+        />
       </g>
     </svg>
   </div>
