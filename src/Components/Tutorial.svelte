@@ -5,8 +5,8 @@
 	import Polar from 'Components/Polar.svelte'
   import Row from 'Components/Row.svelte'
 	import getBearing from '../utils/getBearing.ts'
+	import { INTERVAL_TIME, MAX_HISTORY_LENGTH } from '../utils/consts.ts'
 
-  const MAX_HISTORY_LENGTH = 100
 
   let polarWidth:number = 500
   const PADDING = 30
@@ -26,7 +26,6 @@
 		actor = actor
     intervalCount++
 	}
-  const INTERVAL_TIME = 50
 	const interval = setInterval(run, INTERVAL_TIME)
 	onDestroy(() => {
 		clearInterval(interval)

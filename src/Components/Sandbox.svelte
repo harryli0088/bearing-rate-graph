@@ -5,10 +5,9 @@
   import Ocean from 'Components/Ocean.svelte'
 	import Row from 'Components/Row.svelte'
 	import getBearing from '../utils/getBearing.ts'
-	import { DEG_PER_RAD } from '../utils/consts.ts'
+	import { DEG_PER_RAD, INTERVAL_TIME, MAX_HISTORY_LENGTH } from '../utils/consts.ts'
 
 	const COLORS = ["#EC7063", "#2ECC71", "#3498DB", "#AF7AC5", "#7D3C98"] //"#F39C12", "#F1C40F"
-	const MAX_HISTORY_LENGTH = 100
 
 	let player = new PhysicsObject({
 		maxHistoryLength: MAX_HISTORY_LENGTH,
@@ -121,7 +120,6 @@
 
 	let running = false
   let interval = -1
-  const INTERVAL_TIME = 50
   function onFocus() {
     if(running === false) { //if we are not running yet
 			interval = setInterval(run, INTERVAL_TIME)

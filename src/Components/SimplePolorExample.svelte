@@ -14,7 +14,7 @@
   })
 
   let currentBearing = 0
-  function updateActorPositionCallback() {
+  function updateCallback() { //listen for the update event from Polar
     currentBearing = getBearing(
       0, 0, 0,
       actor.positionX,
@@ -27,11 +27,12 @@
   <Row>
     <Polar
       {actor}
-      {updateActorPositionCallback}
+      on:update={updateCallback}
     />
 
   	<div class="showBearing">
       <div>
+        <br/>
         <div class="label">Bearing of Target: </div>
         <br/><br/>
         <div class="bearingValue"><b>{parseInt(currentBearing)}°</b></div>

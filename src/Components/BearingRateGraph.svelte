@@ -10,8 +10,6 @@
 	let height:number = 500
 	let width:number = 1000
 
-	//TODO don't show anything if target is too far
-
   const margin = {
     top: 40,
     left: 100,
@@ -129,7 +127,7 @@
 
 			<g>
 	      {#each otherActors as actor, i}
-					{#if true}
+					{#if actor.bearingHistories.length > 0}
 						<path
 							d={pathData[i]}
 							opacity={actor.getOpacity()}
@@ -141,13 +139,15 @@
 
 			<g>
 	      {#each otherActors as actor, i}
-	        <circle
-						cx={xScale(actor.bearingHistories[0])}
-						cy={yScale(0)}
-						opacity={actor.getOpacity()}
-						r={actor.getSize()}
-						stroke={colors[i]}
-					/>
+	        {#if actor.bearingHistories.length > 0}
+						<circle
+							cx={xScale(actor.bearingHistories[0])}
+							cy={yScale(0)}
+							opacity={actor.getOpacity()}
+							r={actor.getSize()}
+							stroke={colors[i]}
+						/>
+					{/if}
 	      {/each}
 	    </g>
 	  </svg>

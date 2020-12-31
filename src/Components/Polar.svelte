@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
+
   import PhysicsObject from '../Classes/PhysicsObject.ts'
 
   let fullWidth:number = 500
@@ -16,6 +18,7 @@
     positionY: -10,
   })
 
+  //initialize a dummy player at the origin for the actor to reference
   const dummyPlayer = new PhysicsObject({})
 
   let svg
@@ -26,15 +29,17 @@
     e.preventDefault()
     updateActorPosition(e.touches[0].clientX, e.touches[0].clientY)
   }
-  export let updateActorPositionCallback:Function = () => {}
+
+  const dispatch = createEventDispatcher()
   function updateActorPosition(clientX:number, clientY:number) {
+    //update the actor position relative to the svg
     const dimensions = svg.getBoundingClientRect()
     actor.positionX = clientX - dimensions.left - fullWidth/2
     actor.positionY = clientY - dimensions.top - fullHeight/2
 
     actor.updateDistanceFromPlayer(dummyPlayer)
 
-    updateActorPositionCallback()
+    dispatch('update') //tell the parent the player position was updated
   }
 
 </script>
@@ -50,7 +55,7 @@
         <circle
           cx={0}
           cy={0}
-          r={fullWidth/2}
+          r={Math.min(fullHeight, fullWidth)/2}
           fill="#1B2631"
         />
 
@@ -93,7 +98,7 @@
         <circle
           cx={0}
           cy={0}
-          r={fullWidth/2}
+          r={Math.min(fullHeight, fullWidth)/2}
           on:mousemove={onMouseMove}
           on:touchmove={onTouchMove}
           fill="transparent"

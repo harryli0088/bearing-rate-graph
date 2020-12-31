@@ -4,7 +4,7 @@ export default class PhysicsObject {
   acceleration:number
   angularAcceleration: number
   angularVelocity: number
-  bearingHistories: number[] = []
+  bearingHistories: number[] = [] //acts as a queue, with new values unshifted in front, and old values popped out
   distanceFromPlayer: number = 100
   heading: number
   label: string
@@ -61,21 +61,28 @@ export default class PhysicsObject {
     )
   }
 
-  getSize = () => Math.min(40, 1000 / (this.distanceFromPlayer + 10))
-  getOpacity = () => 400 / (this.distanceFromPlayer + 400)
+  getSize = () => Math.min(40, 1000 / (this.distanceFromPlayer + 10)) //scale size inversely with distance from player
+  getOpacity = () => 400 / (this.distanceFromPlayer + 400) //scale size opacity with distance from player
 
   addBearing = (bearing: number) => {
-    this.bearingHistories.unshift(bearing)
-    if(this.bearingHistories.length > this.maxHistoryLength) {
-      this.bearingHistories.pop()
+    this.bearingHistories.unshift(bearing) //add the new bearing to the front of the array
+    if(this.bearingHistories.length > this.maxHistoryLength) { //if we have too many bearings
+      this.bearingHistories.pop() //remove the last value
     }
   }
 
   setHeading = (heading:number) => {
-    this.heading = heading % 360
+    this.heading = heading % 360 //keep the heading between 0 and 359
   }
-  setHeadingFromDxDy = (dx: number, dy: number) => {
-    this.setHeading(-Math.atan2(dx, dy)*DEG_PER_RAD)
+  setHeadingFromDxDy = (dx: number, dy: number, accountHeading:boolean=false) => {
+    //if appropriate, calculate the heading in radians
+    const radHeading = accountHeading ? this.heading/DEG_PER_RAD : 0
+
+    this.setHeading(
+      (
+        radHeading - Math.atan2(dx, dy) //subtract the heading by the bearing of dx and dy
+      ) * DEG_PER_RAD //convert the radians into degrees
+    )
   }
   incrementHeading = (increment:number) => {
     this.setHeading(this.heading + increment)

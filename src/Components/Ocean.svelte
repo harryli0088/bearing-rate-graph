@@ -56,7 +56,7 @@
       ctx.fillStyle = "lightblue"
       ctx.fillRect(leftX, topY, diagonal, diagonal)
 
-      //grid lines
+      //dynamically calculate grid lines
       ctx.strokeStyle = "gray"
       ctx.lineWidth = 0.5
       const rightX = leftX + diagonal
@@ -94,9 +94,9 @@
       ctx.fillStyle = "black"
       ctx.strokeStyle = "black"
       ctx.beginPath()
-      ctx.moveTo(player.positionX, player.positionY - 6)
-      ctx.lineTo(player.positionX + 5, player.positionY + 6)
-      ctx.lineTo(player.positionX - 5, player.positionY + 6)
+      ctx.moveTo(player.positionX, player.positionY - 8)
+      ctx.lineTo(player.positionX + 6, player.positionY + 8)
+      ctx.lineTo(player.positionX - 6, player.positionY + 8)
       ctx.fill()
 
       ctx.restore() //undo centering and possible rotation transforms
@@ -133,38 +133,45 @@
   	}
   })
 
-  let move = false
+  let move = false //tracks whether we should move the player on mousemove or touchmove
   function onMouseDown(e) {
-    move = true
+    move = true //mark that we should move
     updatePlayer(e.clientX, e.clientY)
   }
   function onMouseMove(e) {
-    if(move) {
+    if(move) { //if we should move
       updatePlayer(e.clientX, e.clientY)
     }
   }
   function onTouchStart(e) {
-    move = true
+    e.preventDefault()
+    move = true //mark that we should move
     updatePlayer(e.touches[0].clientX, e.touches[0].clientY)
   }
   function onTouchMove(e) {
-    if(move) {
+    if(move) { //if we should move
+      e.preventDefault()
       updatePlayer(e.touches[0].clientX, e.touches[0].clientY)
     }
   }
   function updatePlayer(clientX:number, clientY:number) {
+    //get the coordinates of the event relative to the canvas
     const dimensions = canvas.getBoundingClientRect()
-
     const canvasX = clientX - dimensions.left
     const canvasY = clientY - dimensions.top
 
-    player.setHeadingFromDxDy(width/2 - canvasX, height/2 - canvasY)
-    player.acceleration = 0.6
+    //update the player's heading
+    player.setHeadingFromDxDy(
+      width/2 - canvasX,
+      height/2 - canvasY,
+      maintainPlayerPerspective,
+    )
+    player.acceleration = 0.6 //give the player acceleration
   }
 
   function onMouseUpTouchEnd(e) {
-    move = false
-    player.acceleration = 0
+    move = false //mark that we should stop moving
+    player.acceleration = 0 //remove the acceleration
   }
 </script>
 
