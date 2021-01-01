@@ -62,9 +62,9 @@
 		<p>It's difficult to determine, based on SED's unclassified video, the exact implementation of the bearing rate graphs used on the submarines. I built my BRGs based off his examples, and also encoded the distance of the target to scale inversely with the circle size and opacity.</p>
 		<p>Other data about the target(s) that could potentially be encoded into BRGs include:</p>
 		<ul>
-      <li>Classification (ie ship, sub, etc) based on the sound or loudness</li>
+      <li>Classification (ie ship, sub, rock, etc)</li>
 			<li>Relative Depth</li>
-			<li>Change in distance (ie moving away vs coming towards)</li>
+			<li>Change in Distance (ie moving away vs coming towards)</li>
 		</ul>
 	</section>
 
