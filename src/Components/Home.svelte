@@ -40,7 +40,7 @@
 
 	<section>
 		<h2>Free Play</h2>
-		<p>In this ocean, there are a few targets: one following you, one moving in a circle, and one stationary. You can move around <span id="arrowKeys">with arrow keys/WASD or</span> by pressing and holding down on a point in the ocean. See if you can intepret the bearing rate graph!</p>
+		<p>In this ocean, there are a few targets: one following you, one moving in a circle, and one stationary. You can move around <span id="arrowKeys">with arrow keys/WASD or</span> by holding down on a point in the ocean and rotating to turn. See if you can intepret the bearing rate graph!</p>
 
 		<Sandbox/>
 

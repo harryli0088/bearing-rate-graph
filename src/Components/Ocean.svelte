@@ -133,6 +133,7 @@
   	}
   })
 
+  let lastAngle: number = -1 //used to track the last angle for mousemove and touchmove
   let move = false //tracks whether we should move the player on mousemove or touchmove
   function onMouseDown(e) {
     move = true //mark that we should move
@@ -159,17 +160,29 @@
     const dimensions = canvas.getBoundingClientRect()
     const canvasX = clientX - dimensions.left
     const canvasY = clientY - dimensions.top
+    const currentAngle = Math.atan2(width/2 - canvasX, height/2 - canvasY)
 
     //update the player's heading
-    player.setHeadingFromDxDy(
-      width/2 - canvasX,
-      height/2 - canvasY,
-      maintainPlayerPerspective,
-    )
+    if(maintainPlayerPerspective) { //if we need to rotate with the player's perspective
+      if(lastAngle === -1) { //if this is -1, we assume this is a mousedown or touchstart
+        lastAngle = currentAngle //don't rotate on the mousedown or touchstart
+      }
+      player.incrementHeading((currentAngle - lastAngle) * DEG_PER_RAD) //increment the heading by the angular difference
+    }
+    else { //else simply use dx and dy to set the heading
+      player.setHeadingFromDxDy(
+        width/2 - canvasX,
+        height/2 - canvasY,
+        maintainPlayerPerspective,
+      )
+    }
     player.acceleration = 0.6 //give the player acceleration
+
+    lastAngle = currentAngle //save the last angle
   }
 
   function onMouseUpTouchEnd(e) {
+    lastAngle = -1
     move = false //mark that we should stop moving
     player.acceleration = 0 //remove the acceleration
   }
