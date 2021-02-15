@@ -8,14 +8,11 @@
   export let fullWidth:number = 500
   $: centeredWidth = Math.min(500, fullWidth)
   $: fullHeight = centeredWidth
-  const DIAG_CONSTANT = Math.sqrt(2)/2
   const PADDING = 30
   $: width = centeredWidth - 2*PADDING
   $: height = fullHeight - 2*PADDING
   $: halfWidth = width/2
   $: halfHeight = height/2
-
-  let svg
 
 
   const animation = tweened(0, {
@@ -59,14 +56,14 @@
   }
 
   const circleDegrees:number[] = []
-  for(let i=180; i<360; ++i) {
+  for(let i=180; i<360; ++i) { //push numbers 180 to 359
     circleDegrees.push(i)
   }
-  for(let i=0; i<180; ++i) {
+  for(let i=0; i<180; ++i) { //push numbers 0 to 179
     circleDegrees.push(i)
   }
-  circleDegrees.push(179.9)
-  $: topFactor = (12 + 3*$animation) / 16
+  circleDegrees.push(179.9) //this is now equal to [180, 181, ..., 359, 0, 1, ..., 179, 179.9]
+  $: topFactor = (12 + 3*$animation) / 16 //make the circle a little offset from the edge
   $: circlePathRadius = halfWidth * topFactor
   $: circlePath = circleDegrees.reduce(
     (d, degree) => {
@@ -115,7 +112,6 @@
 <main>
   <div bind:clientWidth={fullWidth}>
     <svg
-      bind:this={svg}
       width={fullWidth}
       height={fullHeight}
     >

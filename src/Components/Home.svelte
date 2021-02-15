@@ -10,7 +10,11 @@
 		<div>
 			<h1>Bearing Rate Graphs</h1>
 			<p>How submariners visualize the world around them</p>
+			<div>
+				<a href="https://github.com/harryli0088/bearing-rate-graph" target="_blank" rel="noopener noreferrer"><img src="img/github.svg" alt="github logo"/></a>
+			</div>
 		</div>
+
 	</header>
 
 	<section id="imgContainer">
@@ -27,7 +31,7 @@
 	</section>
 
 	<section>
-		<p>What if we wanted to visualize how a target moves relative to us <b>over time</b>? We can "unwrap" the polar coordinate graph into a rectangle, then add a vertical time axis. This visualization, called a <b>bearing rate graph</b>, represents the bearings of targets as they move around us over time.</p>
+		<p>What if we wanted to visualize how a target moves relative to us <b>over time</b>? We can "unwrap" the polar coordinate graph into a rectangle, then add a vertical time axis. This visualization, called a <b>bearing rate graph</b>, represents the bearings of targets as they move around us over time. (Read about <a href="https://dev.to/harryli0088/unwrapping-polar-coordinate-graph-animation-with-svelte-d3-js-and-svg-3p73" target="_blank" rel="noopener noreferrer">how I made this animation</a>)</p>
 
 		<PolarTransition/>
 	</section>
@@ -90,10 +94,20 @@
 		align-items: center;
 		background-color: #222;
 		padding: 1em;
+		position: relative;
 	}
 
 	header p {
 		font-style: italic;
+	}
+
+	header a img {
+		width: 2em;
+		height: 2em;
+		transition: 0.5s;
+	}
+	header a img:hover {
+		transform: scale(1.25);
 	}
 
 	section, footer {
